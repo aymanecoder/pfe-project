@@ -24,7 +24,7 @@ jobs:
       run: mvn clean install -f ./backed-spring/pom.xml
 
     - name: Run Backend tests
-      run: mvn test -f backend-spring/pom.xml
+      run: mvn test -f ./backed-spring/pom.xml
     
     # Optional: Uploads the full dependency graph to GitHub to improve the quality of Dependabot alerts this repository can receive
     - name: Update dependency graph
