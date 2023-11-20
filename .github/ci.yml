@@ -2,8 +2,10 @@ name: Build and Test
 
 on:
   push:
-    branches:
-      - dev
+    branches: [dev]
+  pull_requests:
+    branches: [prod]
+      
 
 jobs:
   build-and-test:
