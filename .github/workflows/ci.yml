@@ -19,6 +19,10 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
         cache: maven
+    - name: List files in the directory
+      run: ls -R
+    - name: Update file permissions
+      run: chmod +r backend-spring/pom.xml
     
     - name: Build with Maven
       run: mvn -B package -f backend-spring/pom.xml
