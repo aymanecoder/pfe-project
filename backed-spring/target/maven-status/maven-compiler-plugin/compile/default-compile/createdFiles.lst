@@ -1,0 +1,4 @@
+com\group8\projectpfe\controllers\TestController.class
+com\group8\projectpfe\entities\Equipe.class
+com\group8\projectpfe\repositories\EquipeRepository.class
+com\group8\projectpfe\ProjectPfeApplication.class
