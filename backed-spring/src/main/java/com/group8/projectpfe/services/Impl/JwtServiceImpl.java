@@ -1,24 +1,30 @@
 package com.group8.projectpfe.services.Impl;
 
+import com.group8.projectpfe.security.Token;
+import com.group8.projectpfe.security.TokenRepository;
 import com.group8.projectpfe.services.JwtService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.Function;
 
 @Service
+@RequiredArgsConstructor
 public class JwtServiceImpl implements JwtService {
     private final String SECRET_KEY = "6D597133743677397A24432646294A404D635166546A576E5A7234753778214125442A472D4B6150645267556B58703273357638792F423F4528482B4D625165";
     private long jwtExpiration = Long.parseLong("8640000");
 
+    private final TokenRepository tokenRepository;
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
     }
@@ -59,7 +65,20 @@ public class JwtServiceImpl implements JwtService {
 
     public boolean isTokenValid(String token, UserDetails userDetails) {
         final String username = extractUsername(token);
-        return (username.equals(userDetails.getUsername())) && !isTokenExpired(token);
+        return (username.equals(userDetails.getUsername())) && !isTokenExpired(token) && !isTokenRevoked(token);
+    }
+
+    private boolean isTokenRevoked(String token) {
+        // Retrieve the token from the database or cache and check its 'revoked' and 'expired' status
+        // Assuming you have a method to fetch the Token entity based on the token string
+        Optional<Token> tokenEntityOptional = tokenRepository.findByToken(token); // Use your repository method
+
+        if (tokenEntityOptional.isPresent()) {
+            Token tokenEntity = tokenEntityOptional.get();
+            return tokenEntity.isRevoked() || tokenEntity.isExpired();
+        } else {
+            return false; // Token not found, consider it as not revoked or expired
+        }
     }
 
     private boolean isTokenExpired(String token) {
