@@ -23,9 +23,10 @@ public class VideoController {
     }
     @PostMapping("videos")
     public ResponseEntity<VideoDto> createVide(@RequestBody VideoDto video){
-    VideoEntity videoEntity = videoMapper.mapFrom(video);
-    VideoEntity savedVideo = videoService.createVideo(videoEntity);
+        VideoEntity videoEntity = videoMapper.mapFrom(video);
+        VideoEntity savedVideo = videoService.createVideo(videoEntity);
+        return new ResponseEntity<>(videoMapper.mapTo(savedVideo), HttpStatus.CREATED);
+    }
 
-    return new ResponseEntity<>(videoMapper.mapTo(savedVideo), HttpStatus.CREATED);
-}
+
 }
