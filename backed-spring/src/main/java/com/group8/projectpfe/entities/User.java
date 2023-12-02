@@ -28,6 +28,12 @@ public class User implements UserDetails {
     @Email
     private String email;
     private String password;
+    private String address;
+    private Integer age;
+    private Integer taille;
+    private Integer poids;
+    @Lob
+    private byte[] picture;
     @Enumerated(EnumType.STRING)
     private Role role;
 
