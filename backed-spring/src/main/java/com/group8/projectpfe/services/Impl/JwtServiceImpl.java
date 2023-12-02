@@ -69,7 +69,7 @@ public class JwtServiceImpl implements JwtService {
     }
 
     private boolean isTokenRevoked(String token) {
-        Optional<Token> tokenEntityOptional = tokenRepository.findByToken(token); // Use your repository method
+        Optional<Token> tokenEntityOptional = tokenRepository.findByToken(token);
         if (tokenEntityOptional.isPresent()) {
             Token tokenEntity = tokenEntityOptional.get();
             return tokenEntity.isRevoked() || tokenEntity.isExpired();

@@ -21,8 +21,8 @@ jobs:
         cache: maven
 
     - name: Build with Maven
-      run: mvn clean install -f ./backed-spring/pom.xml
+      run: mvn -B clean package -f ./backed-spring/pom.xml
 
     - name: Run Backend tests
-      run: mvn test -f ./backed-spring/pom.xml
+      run: mvn -B test -f ./backed-spring/pom.xml
 
