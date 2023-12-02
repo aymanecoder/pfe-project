@@ -69,15 +69,12 @@ public class JwtServiceImpl implements JwtService {
     }
 
     private boolean isTokenRevoked(String token) {
-        // Retrieve the token from the database or cache and check its 'revoked' and 'expired' status
-        // Assuming you have a method to fetch the Token entity based on the token string
         Optional<Token> tokenEntityOptional = tokenRepository.findByToken(token); // Use your repository method
-
         if (tokenEntityOptional.isPresent()) {
             Token tokenEntity = tokenEntityOptional.get();
             return tokenEntity.isRevoked() || tokenEntity.isExpired();
         } else {
-            return false; // Token not found, consider it as not revoked or expired
+            return false;
         }
     }
 
