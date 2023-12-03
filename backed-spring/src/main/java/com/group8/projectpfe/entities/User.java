@@ -1,5 +1,6 @@
 package com.group8.projectpfe.entities;
 
+import com.group8.projectpfe.security.Token;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import lombok.AllArgsConstructor;
@@ -37,6 +38,9 @@ public class User implements UserDetails {
     private byte[] picture;
     @Enumerated(EnumType.STRING)
     private Role role;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Token> tokens;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
