@@ -23,21 +23,21 @@ public class CoachServiceImpl implements CoachService {
     private final ModelMapper modelMapper;
     @Override
     public List<CoachDTO> getCoachs() {
-        List<User> users=userRepository.findByRole(Role.USER);
+        List<User> users=userRepository.findByRole(Role.COACH);
         return users.stream()
                 .map(coachMapper::mapTo)
                 .collect(Collectors.toList());
     }
     @Override
     public CoachDTO getCoachById(Long coachId) {
-        Optional<User> coach = userRepository.findByIdAndRole(coachId, Role.USER);
+        Optional<User> coach = userRepository.findByIdAndRole(coachId, Role.COACH);
         return coach.map(coachMapper::mapTo).orElse(null);
     }
 
     @Override
     public void deleteCoach(Integer id, Integer userId) {
         // Fetch the Coach by ID
-        User coach = userRepository.findByIdAndRole(Long.valueOf(id),Role.USER).orElse(null);
+        User coach = userRepository.findByIdAndRole(Long.valueOf(id),Role.COACH).orElse(null);
 
         if (coach != null && coach.getId().equals(userId)) {
             // Check if the user associated with the Coach matches the authenticated user
@@ -50,7 +50,7 @@ public class CoachServiceImpl implements CoachService {
 
     @Override
     public void updateCoach(CoachDTO coachDTO) {
-        User existingCoach = userRepository.findByIdAndRole(Long.valueOf(coachDTO.getId()),Role.USER).orElse(null);
+        User existingCoach = userRepository.findByIdAndRole(Long.valueOf(coachDTO.getId()),Role.COACH).orElse(null);
 
         if (existingCoach != null) {
             // Map the updated data from DTO to the existing coach entity
