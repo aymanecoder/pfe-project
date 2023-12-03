@@ -1,14 +1,15 @@
 package com.group8.projectpfe.domain.dto;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
-@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Setter
 @Getter
+@Builder
 public class SportifDTO {
 
+    private Integer id;
     private String firstName;
     private String lastName;
     private String email;

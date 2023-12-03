@@ -8,4 +8,7 @@ public interface SportifService {
     List<SportifDTO> getSportifs();
 
     SportifDTO getSportifById(Long sportifId);
+    void deleteSportif(Integer id,Integer userId);
+
+    void updateSportif(SportifDTO sportifDTO);
 }
