@@ -1,18 +1,15 @@
 package com.group8.projectpfe.entities;
 
-import javax.persistence.Entity;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
-
-import javax.persistence.*;
-
+import jakarta.persistence.*;
+import lombok.*;
 import java.io.Serializable;
 import java.util.List;
 
 @Entity
-@Data @AllArgsConstructor @NoArgsConstructor  @ToString
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class Challenge implements Serializable{
 
     @Id
@@ -22,4 +19,5 @@ public class Challenge implements Serializable{
     @OneToMany(cascade = CascadeType.ALL)
     private List<Team> Teams;
 
+    private String title;
 }

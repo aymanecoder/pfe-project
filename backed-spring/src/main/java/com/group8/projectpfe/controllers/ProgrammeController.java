@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/programmes")
+@RequestMapping("/api/v1/programmes")
 public class ProgrammeController {
 
     private final ProgrammeService programmeService;
