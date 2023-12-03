@@ -36,7 +36,7 @@ public class SportifServiceImpl implements SportifService {
     @Override
     public void deleteSportif(Integer id, Integer userId) {
         // Fetch the Sportif by ID
-        User sportif = userRepository.findById(id).orElse(null);
+        User sportif = userRepository.findByIdAndRole(Long.valueOf(id),Role.USER).orElse(null);
 
         if (sportif != null && sportif.getId().equals(userId)) {
             // Check if the user associated with the Sportif matches the authenticated user
