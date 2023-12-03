@@ -1,18 +1,17 @@
 package com.group8.projectpfe.entities;
 
-import javax.persistence.Entity;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
-
-import javax.persistence.*;
+import jakarta.persistence.*;
+import lombok.*;
 
 import java.io.Serializable;
+import java.util.List;
+
 
 @Entity
-@Table(name="TEAMS")
-@Data @NoArgsConstructor @AllArgsConstructor @ToString
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class Team implements Serializable{
 
     @Id
@@ -20,12 +19,13 @@ public class Team implements Serializable{
     @Column(name = "team_id")
     private int id;
 
-    @Column(name = "admin_id")
-    private int adminId;
+    @ManyToOne
+    @JoinColumn(name = "admin_id")
+    private User admin;
 
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "team_id")
-    //private List<Sportif> members;
+    private List<User> members;
 
     @Column(name = "logo")
     private String logo;

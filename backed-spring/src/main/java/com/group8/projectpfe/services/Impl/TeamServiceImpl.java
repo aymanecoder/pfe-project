@@ -1,12 +1,16 @@
 package com.group8.projectpfe.services.Impl;
 
 import com.group8.projectpfe.domain.dto.ProgrammeDTO;
+import com.group8.projectpfe.domain.dto.SportifDTO;
 import com.group8.projectpfe.domain.dto.TeamDTO;
 import com.group8.projectpfe.entities.Programme;
 import com.group8.projectpfe.entities.Team;
+import com.group8.projectpfe.entities.User;
+import com.group8.projectpfe.mappers.impl.SportifMapper;
 import com.group8.projectpfe.mappers.impl.TeamMapperImpl;
 import com.group8.projectpfe.repositories.TeamRepository;
 import com.group8.projectpfe.services.TeamService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,13 +19,13 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class TeamServiceImpl implements TeamService {
 
-    @Autowired
-    private TeamRepository teamRepository;
+    private final SportifMapper sportifMapper;
+    private final TeamRepository teamRepository;
 
-    @Autowired
-    private TeamMapperImpl teamMapper;
+    private final TeamMapperImpl teamMapper;
 
     @Override
     public List<TeamDTO> getAllTeams() {
@@ -50,8 +54,13 @@ public class TeamServiceImpl implements TeamService {
             Team existingTeam = optionalTeam.get();
 
             // Update existingTeam with updatedTeamDetails
-            existingTeam.setAdminId(updatedTeamDetails.getAdminId());
-            existingTeam.setMembers(updatedTeamDetails.getMembers());
+            List<SportifDTO> sportifDTOList = updatedTeamDetails.getMembers();
+            User user=sportifMapper.mapFrom(updatedTeamDetails.getAdmin());
+            existingTeam.setAdmin(user);
+            List<User> userList = sportifDTOList.stream()
+                    .map(sportifMapper::mapFrom) // Map SportifDTO to User using SportifMapper
+                    .collect(Collectors.toList());
+            existingTeam.setMembers(userList);
             existingTeam.setLogo(updatedTeamDetails.getLogo());
             existingTeam.setDescription(updatedTeamDetails.getDescription());
 
