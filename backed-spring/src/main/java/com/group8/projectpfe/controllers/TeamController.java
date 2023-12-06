@@ -2,6 +2,7 @@ package com.group8.projectpfe.controllers;
 
 import com.group8.projectpfe.domain.dto.TeamDTO;
 import com.group8.projectpfe.services.TeamService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,10 +12,11 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/teams")
+@RequiredArgsConstructor
 public class TeamController {
 
-    @Autowired
-    private TeamService teamService;
+
+    private final TeamService teamService;
 
     @GetMapping
     public ResponseEntity<List<TeamDTO>> getAllTeams() {
