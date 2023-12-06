@@ -52,13 +52,11 @@ public class TeamServiceImpl implements TeamService {
 
         if (optionalTeam.isPresent()) {
             Team existingTeam = optionalTeam.get();
-
-            // Update existingTeam with updatedTeamDetails
             List<SportifDTO> sportifDTOList = updatedTeamDetails.getMembers();
             User user=sportifMapper.mapFrom(updatedTeamDetails.getAdmin());
             existingTeam.setAdmin(user);
             List<User> userList = sportifDTOList.stream()
-                    .map(sportifMapper::mapFrom) // Map SportifDTO to User using SportifMapper
+                    .map(sportifMapper::mapFrom)
                     .collect(Collectors.toList());
             existingTeam.setMembers(userList);
             existingTeam.setLogo(updatedTeamDetails.getLogo());

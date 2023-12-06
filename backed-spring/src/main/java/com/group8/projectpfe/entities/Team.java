@@ -12,12 +12,12 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Team implements Serializable{
+public class Team{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "team_id")
-    private int id;
+    private Integer id;
 
     @ManyToOne
     @JoinColumn(name = "admin_id")
@@ -32,5 +32,8 @@ public class Team implements Serializable{
 
     @Column(name = "description", columnDefinition = "TEXT")
     private String description;
+    @OneToOne
+    private Sport sport;
+
 
 }

@@ -10,5 +10,5 @@ import java.util.List;
 @Repository
 public interface TeamRepository extends JpaRepository<Team, Integer> {
     List<Team> findByDescription(String description);
-    // You can add custom query methods here if needed
+
 }

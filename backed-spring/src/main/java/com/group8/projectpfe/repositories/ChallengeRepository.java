@@ -10,7 +10,7 @@ import java.util.List;
 
 @Repository
 public interface ChallengeRepository extends JpaRepository<Challenge, Integer> {
-    List<Challenge> findByTitle(String title);
-    // You can add custom query methods here if needed
+
+
 }
 
