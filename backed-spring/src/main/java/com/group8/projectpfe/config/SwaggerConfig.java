@@ -11,6 +11,9 @@ import springfox.documentation.service.Contact;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 
+
+
+
 @Configuration
 @EnableWebMvc
 public class SwaggerConfig implements WebMvcConfigurer {
@@ -22,6 +25,7 @@ public class SwaggerConfig implements WebMvcConfigurer {
                 .paths(PathSelectors.regex("/.*"))
                 .build().apiInfo(apiInfoMetaData());
     }
+
 
     private ApiInfo apiInfoMetaData() {
 
