@@ -1,6 +1,5 @@
 package com.group8.projectpfe.domain.dto;
 
-import com.group8.projectpfe.entities.Sport;
 import lombok.*;
 
 import java.util.List;
