@@ -1,5 +1,6 @@
 package com.group8.projectpfe.domain.dto;
 
+import com.group8.projectpfe.entities.Sport;
 import lombok.*;
 
 import java.util.List;
@@ -15,5 +16,4 @@ public class EquipeDTO {
     private List<SportifDTO> members;
     private byte[] logo; // Assuming a byte array for storing the image (you can use Blob in PostgreSQL)
     private String description;
-    private String typeDeSport;
 }

@@ -1,5 +1,6 @@
 package com.group8.projectpfe.domain.dto;
 
+import com.group8.projectpfe.entities.Sport;
 import lombok.*;
 
 import java.util.List;
@@ -19,5 +20,5 @@ public class MatchDTO {
     private int score;
     private String status;
     private boolean isPrivate;
-    private String typeDeSport;
+    private Sport typeDeSport;
 }

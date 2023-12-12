@@ -39,6 +39,11 @@ public class User implements UserDetails {
     @Enumerated(EnumType.STRING)
     private Role role;
 
+    @ManyToMany(mappedBy = "participants")
+    private List<Match> matches;
+    @ManyToMany(mappedBy = "members")
+    private List<Equipe> equipes;
+
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Token> tokens;
 
