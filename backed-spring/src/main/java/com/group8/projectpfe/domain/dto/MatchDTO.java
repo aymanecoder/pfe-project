@@ -15,7 +15,9 @@ public class MatchDTO {
     private String description;
     private String titre;
     private List<SportifDTO> participants;
+    private List<EquipeDTO> Equipes;
     private int score;
     private String status;
     private boolean isPrivate;
+    private String typeDeSport;
 }
