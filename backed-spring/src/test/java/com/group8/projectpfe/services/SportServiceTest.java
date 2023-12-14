@@ -1,4 +1,5 @@
-package com.group8.projectpfe;
+package com.group8.projectpfe.services;
+
 
 import com.group8.projectpfe.domain.dto.SportDTO;
 import com.group8.projectpfe.entities.Sport;
@@ -10,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.Arrays;
 import java.util.List;
@@ -19,6 +21,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
+@SpringBootTest
 class SportServiceTest {
 
     @Mock
@@ -220,3 +223,4 @@ class SportServiceTest {
         verifyNoInteractions(sportRepository);
     }
 }
+
