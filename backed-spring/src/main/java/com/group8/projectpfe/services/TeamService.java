@@ -17,6 +17,6 @@ public interface TeamService {
 
     List<TeamDTO> searchByDescription(String description);
 
-    // Other service methods can be declared here
+
 }
 

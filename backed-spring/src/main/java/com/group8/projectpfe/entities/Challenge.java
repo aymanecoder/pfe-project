@@ -10,7 +10,7 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Challenge implements Serializable{
+public class Challenge{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,6 +18,6 @@ public class Challenge implements Serializable{
 
     @OneToMany(cascade = CascadeType.ALL)
     private List<Team> Teams;
-
-    private String title;
+    @OneToOne
+    private Sport sport;
 }
