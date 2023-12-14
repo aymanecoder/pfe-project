@@ -1,9 +1,8 @@
 package com.group8.projectpfe.mappers.impl;
 
-import com.group8.projectpfe.domain.dto.CoachDTO;
 import com.group8.projectpfe.domain.dto.SportifDTO;
-import com.group8.projectpfe.domain.dto.TeamDTO;
-import com.group8.projectpfe.entities.Team;
+import com.group8.projectpfe.domain.dto.EquipeDTO;
+import com.group8.projectpfe.entities.Equipe;
 import com.group8.projectpfe.entities.User;
 import com.group8.projectpfe.mappers.Mapper;
 import lombok.RequiredArgsConstructor;
@@ -15,17 +14,17 @@ import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
-public class TeamMapperImpl implements Mapper<Team, TeamDTO> {
+public class TeamMapperImpl implements Mapper<Equipe, EquipeDTO> {
 
     private final ModelMapper modelMapper;
 
     private final SportifMapper sportifMapper;
 
     @Override
-    public TeamDTO mapTo(Team team) {
-        TeamDTO teamDTO = modelMapper.map(team, TeamDTO.class);
-        SportifDTO sportifDTO=sportifMapper.mapTo(team.getAdmin());
-        List<User> userList = team.getMembers();
+    public EquipeDTO mapTo(Equipe equipe) {
+        EquipeDTO teamDTO = modelMapper.map(equipe, EquipeDTO.class);
+        SportifDTO sportifDTO=sportifMapper.mapTo(equipe.getAdmin());
+        List<User> userList = equipe.getMembers();
         List<SportifDTO> sportifDTOList = userList.stream()
                 .map(sportifMapper::mapTo)
                 .collect(Collectors.toList());
@@ -36,8 +35,8 @@ public class TeamMapperImpl implements Mapper<Team, TeamDTO> {
     }
 
     @Override
-    public Team mapFrom(TeamDTO teamDTO) {
-        Team team = modelMapper.map(teamDTO, Team.class);
+    public Equipe mapFrom(EquipeDTO teamDTO) {
+        Equipe equipe = modelMapper.map(teamDTO, Equipe.class);
 
         User coach=sportifMapper.mapFrom(teamDTO.getAdmin());
         List<SportifDTO> sportifDTOList = teamDTO.getMembers();
@@ -45,8 +44,8 @@ public class TeamMapperImpl implements Mapper<Team, TeamDTO> {
                 .map(sportifMapper::mapFrom)
                 .collect(Collectors.toList());
 
-        team.setAdmin(coach);
-        team.setMembers(userList);
-        return team;
+        equipe.setAdmin(coach);
+        equipe.setMembers(userList);
+        return equipe;
     }
 }

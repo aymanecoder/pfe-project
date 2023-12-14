@@ -11,7 +11,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class TeamDTO {
+public class EquipeDTO {
 
     private SportifDTO admin;
     private List<SportifDTO> members;

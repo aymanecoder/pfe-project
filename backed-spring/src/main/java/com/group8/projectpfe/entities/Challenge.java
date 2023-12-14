@@ -2,7 +2,7 @@ package com.group8.projectpfe.entities;
 
 import jakarta.persistence.*;
 import lombok.*;
-import java.io.Serializable;
+
 import java.util.List;
 
 @Entity
@@ -17,7 +17,7 @@ public class Challenge{
     private int id;
 
     @OneToMany(cascade = CascadeType.ALL)
-    private List<Team> Teams;
+    private List<Equipe> equipes;
     @OneToOne
     private Sport sport;
 }
