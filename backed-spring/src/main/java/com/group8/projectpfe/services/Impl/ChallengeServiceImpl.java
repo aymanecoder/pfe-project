@@ -5,6 +5,7 @@ import com.group8.projectpfe.entities.Challenge;
 import com.group8.projectpfe.mappers.impl.ChallengeMapperImpl;
 import com.group8.projectpfe.repositories.ChallengeRepository;
 import com.group8.projectpfe.services.ChallengeService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,13 +14,14 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class ChallengeServiceImpl implements ChallengeService {
 
-    @Autowired
-    private ChallengeRepository challengeRepository;
 
-    @Autowired
-    private ChallengeMapperImpl challengeMapper;
+    private final ChallengeRepository challengeRepository;
+
+
+    private final ChallengeMapperImpl challengeMapper;
 
     @Override
     public List<ChallengeDTO> getAllChallenges() {
@@ -46,14 +48,9 @@ public class ChallengeServiceImpl implements ChallengeService {
 
         if (optionalChallenge.isPresent()) {
             Challenge existingChallenge = optionalChallenge.get();
-
-            // Update existingChallenge with updatedChallengeDetails
-            // ...
-
             Challenge updatedChallenge = challengeRepository.save(existingChallenge);
             return challengeMapper.mapTo(updatedChallenge);
         } else {
-            // Handle scenario when the challenge with the given ID is not found
             return null;
         }
     }
@@ -63,11 +60,7 @@ public class ChallengeServiceImpl implements ChallengeService {
         challengeRepository.deleteById(id);
     }
 
-    @Override
-    public List<ChallengeDTO> searchByTitle(String title) {
-        List<Challenge> challengesByTitle = challengeRepository.findByTitle(title);
-        return challengesByTitle.stream().map(challengeMapper::mapTo).collect(Collectors.toList());
-    }
+
 
 
 }

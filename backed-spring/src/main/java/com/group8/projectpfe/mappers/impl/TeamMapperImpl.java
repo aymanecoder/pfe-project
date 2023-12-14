@@ -25,10 +25,9 @@ public class TeamMapperImpl implements Mapper<Team, TeamDTO> {
     public TeamDTO mapTo(Team team) {
         TeamDTO teamDTO = modelMapper.map(team, TeamDTO.class);
         SportifDTO sportifDTO=sportifMapper.mapTo(team.getAdmin());
-        // Map List<User> to List<SportifDTO>
         List<User> userList = team.getMembers();
         List<SportifDTO> sportifDTOList = userList.stream()
-                .map(sportifMapper::mapTo) // Map User to SportifDTO using UserSportifMapper
+                .map(sportifMapper::mapTo)
                 .collect(Collectors.toList());
 
         teamDTO.setAdmin(sportifDTO);
@@ -41,10 +40,9 @@ public class TeamMapperImpl implements Mapper<Team, TeamDTO> {
         Team team = modelMapper.map(teamDTO, Team.class);
 
         User coach=sportifMapper.mapFrom(teamDTO.getAdmin());
-        // Map List<SportifDTO> to List<User>
         List<SportifDTO> sportifDTOList = teamDTO.getMembers();
         List<User> userList = sportifDTOList.stream()
-                .map(sportifMapper::mapFrom) // Map SportifDTO to User using UserSportifMapper
+                .map(sportifMapper::mapFrom)
                 .collect(Collectors.toList());
 
         team.setAdmin(coach);

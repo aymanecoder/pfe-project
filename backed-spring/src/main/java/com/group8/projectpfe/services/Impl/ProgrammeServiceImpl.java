@@ -57,18 +57,15 @@ public class ProgrammeServiceImpl implements ProgrammeService {
         Programme programmeToCreate = new Programme();
         programmeToCreate.setUrl(programmeDetails.getUrl());
         programmeToCreate.setTitle(programmeDetails.getTitle());
-        programmeToCreate.setFichier(programmeDetails.getFichier());
+        programmeToCreate.setTypeProgramme(programmeDetails.getTypeProgramme());
 
         // Save Programme entity
         Programme savedProgramme = programmeRepository.save(programmeToCreate);
-
-        // Mapping saved Programme entity to ProgrammeDTO
         ProgrammeDTO savedProgrammeDTO = new ProgrammeDTO();
-        savedProgrammeDTO.setId(savedProgramme.getId());
         savedProgrammeDTO.setUrl(savedProgramme.getUrl());
         savedProgrammeDTO.setTitle(savedProgramme.getTitle());
-        savedProgrammeDTO.setFichier(savedProgramme.getFichier());
 
+        savedProgrammeDTO.setTypeProgramme(savedProgramme.getTypeProgramme());
         return savedProgrammeDTO;
     }
 
@@ -78,16 +75,10 @@ public class ProgrammeServiceImpl implements ProgrammeService {
 
         if (optionalProgramme.isPresent()) {
             Programme existingProgramme = optionalProgramme.get();
-
-            // Update Programme entity with updated details from ProgrammeDTO
             existingProgramme.setUrl(updatedProgrammeDetails.getUrl());
             existingProgramme.setTitle(updatedProgrammeDetails.getTitle());
-            existingProgramme.setFichier(updatedProgrammeDetails.getFichier());
-
-            // Save the updated Programme entity
+            existingProgramme.setTypeProgramme(updatedProgrammeDetails.getTypeProgramme());
             Programme updatedProgramme = programmeRepository.save(existingProgramme);
-
-            // Map the updated Programme entity to ProgrammeDTO
             return programmeMapper.mapTo(updatedProgramme);
         } else {
             return null;

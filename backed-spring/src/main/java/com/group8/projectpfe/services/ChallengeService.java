@@ -15,7 +15,7 @@ public interface ChallengeService {
 
     void deleteChallenge(int id);
 
-    List<ChallengeDTO> searchByTitle(String title);
 
-    // Other service methods can be declared here
+
+
 }

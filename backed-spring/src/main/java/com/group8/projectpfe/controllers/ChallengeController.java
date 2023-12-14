@@ -2,6 +2,7 @@ package com.group8.projectpfe.controllers;
 
 import com.group8.projectpfe.domain.dto.ChallengeDTO;
 import com.group8.projectpfe.services.ChallengeService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,10 +12,11 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/challenges")
+@RequiredArgsConstructor
 public class ChallengeController {
 
-    @Autowired
-    private ChallengeService challengeService;
+
+    private final ChallengeService challengeService;
 
     @GetMapping
     public ResponseEntity<List<ChallengeDTO>> getAllChallenges() {

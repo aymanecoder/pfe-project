@@ -9,16 +9,16 @@ import java.io.Serializable;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Programme implements Serializable {
+public class Programme{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String url;
     private String title;
-    private String fichier;
+    private String typeProgramme;
 }
 
 
-// getters and setters
+
 
