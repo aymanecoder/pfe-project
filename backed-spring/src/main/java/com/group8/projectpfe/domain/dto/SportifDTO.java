@@ -17,5 +17,5 @@ public class SportifDTO {
     private Integer age;
     private Integer taille;
     private Integer poids;
-    private byte[] picture;
+    private String PicturePath;
 }
