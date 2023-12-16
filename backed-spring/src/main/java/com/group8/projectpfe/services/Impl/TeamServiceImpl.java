@@ -1,19 +1,24 @@
 package com.group8.projectpfe.services.Impl;
 
 import com.group8.projectpfe.domain.dto.ProgrammeDTO;
+import com.group8.projectpfe.domain.dto.SportDTO;
 import com.group8.projectpfe.domain.dto.SportifDTO;
 import com.group8.projectpfe.domain.dto.TeamDTO;
 import com.group8.projectpfe.entities.Programme;
+import com.group8.projectpfe.entities.Sport;
 import com.group8.projectpfe.entities.Team;
 import com.group8.projectpfe.entities.User;
 import com.group8.projectpfe.mappers.impl.SportifMapper;
 import com.group8.projectpfe.mappers.impl.TeamMapperImpl;
+import com.group8.projectpfe.repositories.SportRepository;
 import com.group8.projectpfe.repositories.TeamRepository;
+import com.group8.projectpfe.repositories.UserRepository;
 import com.group8.projectpfe.services.TeamService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -24,7 +29,8 @@ public class TeamServiceImpl implements TeamService {
 
     private final SportifMapper sportifMapper;
     private final TeamRepository teamRepository;
-
+    private final SportRepository sportRepository;
+    private final UserRepository userRepository;
     private final TeamMapperImpl teamMapper;
 
     @Override
@@ -41,7 +47,24 @@ public class TeamServiceImpl implements TeamService {
 
     @Override
     public TeamDTO createTeam(TeamDTO teamDetails) {
+        // Assuming EntityManager is available or injected
         Team teamToCreate = teamMapper.mapFrom(teamDetails);
+
+        // Retrieve managed admin user
+        User managedAdmin = userRepository.getById(teamToCreate.getAdmin().getId());
+
+        // Retrieve and manage members
+        List<User> managedMembers = new ArrayList<>();
+        for (User member : teamToCreate.getMembers()) {
+            User managedMember = userRepository.getById(member.getId());
+            managedMembers.add(managedMember);
+        }
+
+        Sport sport=sportRepository.findById(teamToCreate.getSport().getId()).orElse(null);
+        teamToCreate.setSport(sport);
+        teamToCreate.setAdmin(managedAdmin);
+        teamToCreate.setMembers(managedMembers);
+
         Team savedTeam = teamRepository.save(teamToCreate);
         return teamMapper.mapTo(savedTeam);
     }

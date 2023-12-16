@@ -1,9 +1,11 @@
 package com.group8.projectpfe.domain.dto;
 
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
 
-@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Setter
+@Getter
 @Builder
 public class SportDTO {
     private Integer id;
