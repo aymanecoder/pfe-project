@@ -51,13 +51,24 @@ private final JwtService jwtService;
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         if (authentication != null && authentication.isAuthenticated()) {
-           User user =(User) authentication.getPrincipal(); // Retrieve the username (assuming it's the email)
-            sportifService.deleteSportif(id,user.getId());
+            User user =(User) authentication.getPrincipal(); // Retrieve the username (assuming it's the email)
+            SportifDTO sportifDTO = sportifService.getSportifById(Long.valueOf(id));
+
+            if (sportifDTO != null && sportifDTO.getId().equals(user.getId())) {
+                try {
+                    imageService.deleteProfile(sportifDTO.getPicturePath());
+                    sportifService.deleteSportif(id, user.getId());
+                } catch (IOException e) {
+                    return new ResponseEntity<>("Failed to delete user or profile image", HttpStatus.INTERNAL_SERVER_ERROR);
+                }
+
+                return new ResponseEntity<>("User deleted successfully", HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>("Unauthorized delete or sportif not found", HttpStatus.NOT_FOUND);
+            }
         } else {
-            // Handle cases where the user is not authenticated
-            return new ResponseEntity<>("User not authenticated", HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("User not authenticated", HttpStatus.UNAUTHORIZED);
         }
-        return new ResponseEntity<>("User deleted successfully", HttpStatus.OK);
     }
 
     @PutMapping("/{id}")
@@ -75,6 +86,9 @@ private final JwtService jwtService;
                 if (!file.isEmpty()) {
                     try {
                         String imagePath = imageService.saveImage(file); // Save the image and get the generated file path
+                        if (existingSportif.getPicturePath() != null) {
+                            imageService.deleteProfile(existingSportif.getPicturePath()); // Delete the old profile picture
+                        }
                         sportifDTO.setPicturePath(imagePath); // Set the image path in the DTO instead of the byte array
                     } catch (IOException e) {
                         // Handle file processing error

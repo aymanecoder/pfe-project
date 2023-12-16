@@ -33,7 +33,7 @@ public class ImageService {
         Files.copy(file.getInputStream(), path);
 
         // Construct and return the URL
-        String fileUrl = "http://localhost:" + port + "/api/v1//profile/" + uniqueFileName;
+        String fileUrl = "http://localhost:" + port + "/api/v1/profile/" + uniqueFileName;
         return fileUrl;
     }
 
@@ -59,6 +59,18 @@ public class ImageService {
         return Files.probeContentType(filePath);
     }
 
-    // Your other methods...
+    public void deleteProfile(String filename) throws IOException {
+        String[] parts = filename.split("/");
+        String fileName = parts[parts.length - 1]; // Get the last part assuming it's the file name
+
+        Path imagePath = root.resolve(fileName).normalize();
+        Resource resource = new UrlResource(imagePath.toUri());
+
+        if (resource.exists() && resource.isReadable()) {
+            Files.delete(imagePath);
+        } else {
+        //    throw new RuntimeException("File cannot be deleted or does not exist");
+        }
+    }
 }
 
