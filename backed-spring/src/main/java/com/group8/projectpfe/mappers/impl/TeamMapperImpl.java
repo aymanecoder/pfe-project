@@ -1,8 +1,8 @@
 package com.group8.projectpfe.mappers.impl;
 
 import com.group8.projectpfe.domain.dto.SportifDTO;
-import com.group8.projectpfe.domain.dto.EquipeDTO;
-import com.group8.projectpfe.entities.Equipe;
+import com.group8.projectpfe.domain.dto.TeamDTO;
+import com.group8.projectpfe.entities.Team;
 import com.group8.projectpfe.entities.User;
 import com.group8.projectpfe.mappers.Mapper;
 import lombok.RequiredArgsConstructor;
@@ -14,15 +14,15 @@ import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
-public class TeamMapperImpl implements Mapper<Equipe, EquipeDTO> {
+public class TeamMapperImpl implements Mapper<Team, TeamDTO> {
 
     private final ModelMapper modelMapper;
 
     private final SportifMapper sportifMapper;
 
     @Override
-    public EquipeDTO mapTo(Equipe equipe) {
-        EquipeDTO teamDTO = modelMapper.map(equipe, EquipeDTO.class);
+    public TeamDTO mapTo(Team equipe) {
+        TeamDTO teamDTO = modelMapper.map(equipe, TeamDTO.class);
         SportifDTO sportifDTO=sportifMapper.mapTo(equipe.getAdmin());
         List<User> userList = equipe.getMembers();
         List<SportifDTO> sportifDTOList = userList.stream()
@@ -35,8 +35,8 @@ public class TeamMapperImpl implements Mapper<Equipe, EquipeDTO> {
     }
 
     @Override
-    public Equipe mapFrom(EquipeDTO teamDTO) {
-        Equipe equipe = modelMapper.map(teamDTO, Equipe.class);
+    public Team mapFrom(TeamDTO teamDTO) {
+        Team equipe = modelMapper.map(teamDTO, Team.class);
 
         User coach=sportifMapper.mapFrom(teamDTO.getAdmin());
         List<SportifDTO> sportifDTOList = teamDTO.getMembers();

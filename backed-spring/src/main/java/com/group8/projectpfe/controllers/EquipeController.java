@@ -1,7 +1,7 @@
 package com.group8.projectpfe.controllers;
 
-import com.group8.projectpfe.domain.dto.EquipeDTO;
-import com.group8.projectpfe.services.EquipeService;
+import com.group8.projectpfe.domain.dto.TeamDTO;
+import com.group8.projectpfe.services.TeamService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,30 +15,30 @@ import java.util.List;
 public class EquipeController {
 
 
-    private final EquipeService equipeService;
+    private final TeamService equipeService;
 
     @GetMapping
-    public ResponseEntity<List<EquipeDTO>> getAllTeams() {
-        List<EquipeDTO> teams = equipeService.getAllTeams();
+    public ResponseEntity<List<TeamDTO>> getAllTeams() {
+        List<TeamDTO> teams = equipeService.getAllTeams();
         return new ResponseEntity<>(teams, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<EquipeDTO> getTeamById(@PathVariable int id) {
+    public ResponseEntity<TeamDTO> getTeamById(@PathVariable int id) {
         return equipeService.getTeamById(id)
                 .map(team -> new ResponseEntity<>(team, HttpStatus.OK))
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
     @PostMapping
-    public ResponseEntity<EquipeDTO> createTeam(@RequestBody EquipeDTO teamDetails) {
-        EquipeDTO createdTeam = equipeService.createTeam(teamDetails);
+    public ResponseEntity<TeamDTO> createTeam(@RequestBody TeamDTO teamDetails) {
+        TeamDTO createdTeam = equipeService.createTeam(teamDetails);
         return new ResponseEntity<>(createdTeam, HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<EquipeDTO> updateTeam(@PathVariable int id, @RequestBody EquipeDTO updatedTeamDetails) {
-        EquipeDTO updatedTeam = equipeService.updateTeam(id, updatedTeamDetails);
+    public ResponseEntity<TeamDTO> updateTeam(@PathVariable int id, @RequestBody TeamDTO updatedTeamDetails) {
+        TeamDTO updatedTeam = equipeService.updateTeam(id, updatedTeamDetails);
         if (updatedTeam != null) {
             return new ResponseEntity<>(updatedTeam, HttpStatus.OK);
         } else {

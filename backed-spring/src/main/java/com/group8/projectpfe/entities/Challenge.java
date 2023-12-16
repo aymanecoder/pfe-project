@@ -17,7 +17,7 @@ public class Challenge{
     private int id;
 
     @OneToMany(cascade = CascadeType.ALL)
-    private List<Equipe> equipes;
+    private List<Team> equipes;
     @OneToOne
     private Sport sport;
 }

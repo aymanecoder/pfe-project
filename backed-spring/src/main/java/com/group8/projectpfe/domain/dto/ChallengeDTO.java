@@ -12,6 +12,6 @@ import java.util.List;
 public class ChallengeDTO {
 
     private int id;
-    private List<EquipeDTO> teams;
+    private List<TeamDTO> teams;
     private SportDTO sport;
 }
