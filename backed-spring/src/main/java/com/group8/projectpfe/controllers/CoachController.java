@@ -1,6 +1,7 @@
 package com.group8.projectpfe.controllers;
 
 import com.group8.projectpfe.domain.dto.CoachDTO;
+import com.group8.projectpfe.domain.dto.SportifDTO;
 import com.group8.projectpfe.entities.User;
 import com.group8.projectpfe.services.Impl.ImageService;
 import com.group8.projectpfe.services.JwtService;
@@ -46,14 +47,26 @@ private final JwtService jwtService;
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         if (authentication != null && authentication.isAuthenticated()) {
-           User user =(User) authentication.getPrincipal(); // Retrieve the username (assuming it's the email)
-            coachService.deleteCoach(id,user.getId());
+            User user =(User) authentication.getPrincipal(); // Retrieve the username (assuming it's the email)
+            CoachDTO coachDTO = coachService.getCoachById(Long.valueOf(id));
+
+            if (coachDTO != null && coachDTO.getId().equals(user.getId())) {
+                try {
+                    imageService.deleteProfile(coachDTO.getPicturePath());
+                    coachService.deleteCoach(id, user.getId());
+                } catch (IOException e) {
+                    return new ResponseEntity<>("Failed to delete user or profile image", HttpStatus.INTERNAL_SERVER_ERROR);
+                }
+
+                return new ResponseEntity<>("User deleted successfully", HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>("Unauthorized delete or coach not found", HttpStatus.NOT_FOUND);
+            }
         } else {
-            // Handle cases where the user is not authenticated
-            return new ResponseEntity<>("User not authenticated", HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("User not authenticated", HttpStatus.UNAUTHORIZED);
         }
-        return new ResponseEntity<>("User deleted successfully", HttpStatus.OK);
     }
+
 
     @PutMapping("/{id}")
     public ResponseEntity<String> updateCoach(@PathVariable Integer id, @RequestParam("file") MultipartFile file, @ModelAttribute CoachDTO coachDTO) {
@@ -70,7 +83,10 @@ private final JwtService jwtService;
                 if (!file.isEmpty()) {
                     try {
                         String imagePath = imageService.saveImage(file); // Save the image and get the generated file path
-                        coachDTO.setPicturePath(imagePath); // Set the image path in the DTO instead of the byte array
+                        if (existingCoach.getPicturePath() != null) {
+                            imageService.deleteProfile(existingCoach.getPicturePath()); // Delete the old profile picture
+                        }
+                        existingCoach.setPicturePath(imagePath); // Set the image path in the DTO instead of the byte array
                     } catch (IOException e) {
                         // Handle file processing error
                         return new ResponseEntity<>("Failed to process the image", HttpStatus.INTERNAL_SERVER_ERROR);
