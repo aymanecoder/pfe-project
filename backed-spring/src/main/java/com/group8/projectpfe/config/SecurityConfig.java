@@ -31,12 +31,13 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable).authorizeHttpRequests(
-                request ->request.requestMatchers("/api/v1/auth/**")
-                        .permitAll()
-                        .requestMatchers("api/v1/coach").hasRole(Role.COACH.name())
-                        .requestMatchers("api/v1/sportif").hasRole(Role.USER.name())
-                        .anyRequest()
-                        .authenticated())
+                        request ->request.requestMatchers("/api/v1/auth/**")
+                                .permitAll()
+                                .requestMatchers("api/v1/coach").hasRole(Role.COACH.name())
+                                .requestMatchers("api/v1/sportif").hasRole(Role.USER.name())
+                                .requestMatchers("/api/v1/profile/**").permitAll()
+                                .anyRequest()
+                                .authenticated())
                 .sessionManagement(manager->manager.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider()).addFilterBefore(
                         jwtAuthFilter, UsernamePasswordAuthenticationFilter.class
