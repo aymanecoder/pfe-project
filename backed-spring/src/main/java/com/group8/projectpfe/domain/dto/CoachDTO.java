@@ -17,5 +17,5 @@ public class CoachDTO {
     private Integer age;
     private Integer taille;
     private Integer poids;
-    private byte[] picture;
+    private String PicturePath;
 }

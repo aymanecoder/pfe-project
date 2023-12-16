@@ -35,6 +35,7 @@ public class SecurityConfig {
                         .permitAll()
                         .requestMatchers("api/v1/coach").hasRole(Role.COACH.name())
                         .requestMatchers("api/v1/sportif").hasRole(Role.USER.name())
+                        .requestMatchers("/api/v1/profile/**").permitAll()
                         .anyRequest()
                         .authenticated())
                 .sessionManagement(manager->manager.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

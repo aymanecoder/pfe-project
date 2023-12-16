@@ -11,7 +11,7 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Equipe {
+public class Team {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
