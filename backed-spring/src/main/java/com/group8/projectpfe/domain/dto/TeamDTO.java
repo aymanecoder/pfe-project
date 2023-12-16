@@ -17,7 +17,7 @@ public class TeamDTO {
     private List<SportifDTO> members;
     private String logo;
     private String description;
-    private Sport sport;
+    private SportDTO sport;
 
 }
 
