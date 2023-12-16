@@ -6,6 +6,7 @@ import com.group8.projectpfe.entities.User;
 import com.group8.projectpfe.repositories.UserRepository;
 import com.group8.projectpfe.services.SportifService;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -21,6 +22,7 @@ public class SportifServiceImpl implements SportifService {
     private final SportifMapper sportifMapper;
     private final ModelMapper modelMapper;
     @Override
+    @Transactional
     public List<SportifDTO> getSportifs() {
         List<User> users=userRepository.findByRole(Role.USER);
         return users.stream()
@@ -28,6 +30,7 @@ public class SportifServiceImpl implements SportifService {
                 .collect(Collectors.toList());
     }
     @Override
+    @Transactional
     public SportifDTO getSportifById(Long sportifId) {
         Optional<User> sportif = userRepository.findByIdAndRole(sportifId, Role.USER);
         return sportif.map(sportifMapper::mapTo).orElse(null);

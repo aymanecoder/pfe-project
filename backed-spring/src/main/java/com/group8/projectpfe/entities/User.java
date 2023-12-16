@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Type;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -34,8 +35,8 @@ public class User implements UserDetails {
     private Integer age;
     private Integer taille;
     private Integer poids;
-    @Lob
-    private byte[] picture;
+
+    private String  PicturePath;
     @Enumerated(EnumType.STRING)
     private Role role;
 
