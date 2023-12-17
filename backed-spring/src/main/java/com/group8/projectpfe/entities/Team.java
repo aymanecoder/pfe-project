@@ -19,11 +19,11 @@ public class Team{
     @Column(name = "team_id")
     private Integer id;
 
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinColumn(name = "admin_id")
     private User admin;
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinColumn(name = "team_id")
     private List<User> members;
 
@@ -32,8 +32,12 @@ public class Team{
 
     @Column(name = "description", columnDefinition = "TEXT")
     private String description;
-    @OneToOne
+
+    @OneToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     private Sport sport;
 
+    @ManyToOne
+    @JoinColumn(name = "challenge_id")
+    private Challenge challenge;
 
 }

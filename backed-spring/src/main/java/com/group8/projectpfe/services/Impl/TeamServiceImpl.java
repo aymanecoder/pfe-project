@@ -60,7 +60,14 @@ public class TeamServiceImpl implements TeamService {
             managedMembers.add(managedMember);
         }
 
-        Sport sport=sportRepository.findById(teamToCreate.getSport().getId()).orElse(null);
+        // Check if the sport already exists
+        Sport sport = sportRepository.findById(teamToCreate.getSport().getId()).orElse(null);
+
+        // If the sport doesn't exist, create a new one
+        if (sport == null) {
+            sport = sportRepository.save(teamToCreate.getSport());
+        }
+
         teamToCreate.setSport(sport);
         teamToCreate.setAdmin(managedAdmin);
         teamToCreate.setMembers(managedMembers);
