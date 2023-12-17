@@ -28,9 +28,9 @@ import java.util.Optional;
 public class VideoController {
     private final VideoService videoService;
     private final FileService fileService;
+    private final VideoRepository videoRepository;
     @Value("${project.video}")
     private String path;
-    private VideoRepository videoRepository;
     @PostMapping
     public ResponseEntity<VideoDto> createVideo(@RequestBody VideoDto videoDto) {
         VideoDto createdVideo = videoService.createVideo(videoDto);
@@ -62,7 +62,7 @@ public class VideoController {
     }
 
     @PostMapping("/post/{id}")
-    public VideoDto uploadVideo(@RequestParam("video") MultipartFile video,Integer id) throws IOException {
+    public VideoDto uploadVideo(@RequestParam("video") MultipartFile video,@PathVariable Integer id) throws IOException {
         VideoDto v = videoService.getVideoById(id);
         FileModel fileModel = fileService.uploadVideo(path,video);
         v.setVideoName(fileModel.getVideoFileName());

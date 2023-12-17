@@ -18,9 +18,11 @@ import java.util.stream.Collectors;
 public class VideoServiceImpl implements VideoService {
     private final VideoRepository videoRepository;
     private final VideoMapperImpl videoMapper;
+    @Override
     public VideoDto createVideo(VideoDto videoDto) {
-        if (videoDto.getTitre().isEmpty()) {
-            throw new ResourceNotFound(false, "Video title can not be null");
+        String titre = videoDto.getTitre();
+        if (titre == null || titre.isEmpty()) {
+            throw new ResourceNotFound(false, "Video title cannot be null or empty");
         }
 
         try {
@@ -28,16 +30,24 @@ public class VideoServiceImpl implements VideoService {
             Video savedVideo = videoRepository.save(video);
             return videoMapper.mapTo(savedVideo);
         } catch (Exception e) {
+            // Log the exception details for debugging purposes
+            e.printStackTrace();
             throw new ResourceNotFound(false, "Something went wrong while creating the video");
         }
     }
-
+    @Override
     public VideoDto getVideoById(Integer id) {
+        if (id == null) {
+            throw new IllegalArgumentException("Video ID must not be null");
+        }
+
         Video video = videoRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFound(false, "Video not found with id: " + id));
+
         return videoMapper.mapTo(video);
     }
 
+    @Override
     public VideoDto updateVideo(Integer id, VideoDto videoDto) {
         if (videoDto.getTitre().isEmpty()) {
             throw new ResourceNotFound(false, "Video title can not be null");
@@ -56,7 +66,7 @@ public class VideoServiceImpl implements VideoService {
             throw new ResourceNotFound(false, "Something went wrong while updating the video");
         }
     }
-
+    @Override
     public List<VideoDto> getAllVideos() {
         List<Video> videos = videoRepository.findAll();
 
@@ -64,7 +74,7 @@ public class VideoServiceImpl implements VideoService {
                 .map(videoMapper::mapTo)
                 .collect(Collectors.toList());
     }
-
+    @Override
     public void deleteVideo(Integer id) {
         if (!videoRepository.existsById(id)) {
             throw new ResourceNotFound(false, "Video not found with id: " + id);
