@@ -60,8 +60,13 @@ public class TeamServiceImpl implements TeamService {
             managedMembers.add(managedMember);
         }
 
-        Sport sport=sportRepository.findById(teamToCreate.getSport().getId()).orElse(null);
-        teamToCreate.setSport(sport);
+        // Retrieve the existing sport from the database
+        Sport existingSport = sportRepository.findById(teamToCreate.getSport().getId()).orElse(null);
+
+        if (existingSport != null) {
+            teamToCreate.setSport(existingSport);
+        }
+
         teamToCreate.setAdmin(managedAdmin);
         teamToCreate.setMembers(managedMembers);
 
@@ -75,20 +80,26 @@ public class TeamServiceImpl implements TeamService {
 
         if (optionalTeam.isPresent()) {
             Team existingTeam = optionalTeam.get();
-            List<SportifDTO> sportifDTOList = updatedTeamDetails.getMembers();
-            User user=sportifMapper.mapFrom(updatedTeamDetails.getAdmin());
+
+            User user = userRepository.getById(updatedTeamDetails.getAdmin().getId());
             existingTeam.setAdmin(user);
-            List<User> userList = sportifDTOList.stream()
-                    .map(sportifMapper::mapFrom)
+
+            Sport sport = sportRepository.getReferenceById(updatedTeamDetails.getSport().getId());
+            existingTeam.setSport(sport);
+            // Assuming you're getting the members as a list of User IDs in the DTO
+            List<Integer> memberIds = updatedTeamDetails.getMembers().stream()
+                    .map(SportifDTO::getId) // Assuming getId() returns the user ID as an Integer
                     .collect(Collectors.toList());
-            existingTeam.setMembers(userList);
+            List<User> members = userRepository.findAllById(memberIds);
+            existingTeam.setMembers(members);
+
             existingTeam.setLogo(updatedTeamDetails.getLogo());
             existingTeam.setDescription(updatedTeamDetails.getDescription());
 
             Team updatedTeam = teamRepository.save(existingTeam);
             return teamMapper.mapTo(updatedTeam);
         } else {
-            // Handle scenario when the team with given ID is not found
+            // Handle scenario when the team with the given ID is not found
             return null;
         }
     }

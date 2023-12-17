@@ -24,8 +24,7 @@ import java.util.logging.Logger;
 public class CoachController {
 
     private final CoachService coachService;
-
-private final JwtService jwtService;
+    private final JwtService jwtService;
     private final ImageService imageService;
 
     @GetMapping("")

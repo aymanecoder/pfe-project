@@ -15,9 +15,10 @@ public class Challenge{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+    @OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @JoinColumn(name = "challenge_id")
+    private List<Team> Teams;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    private List<Team> equipes;
-    @OneToOne
+    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     private Sport sport;
 }
