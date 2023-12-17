@@ -35,7 +35,6 @@ public class User implements UserDetails {
     private Integer age;
     private Integer taille;
     private Integer poids;
-
     private String  PicturePath;
     @Enumerated(EnumType.STRING)
     private Role role;

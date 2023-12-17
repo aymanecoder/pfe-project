@@ -1,7 +1,6 @@
 package com.group8.projectpfe.domain.dto;
 
 
-import com.group8.projectpfe.entities.Sport;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

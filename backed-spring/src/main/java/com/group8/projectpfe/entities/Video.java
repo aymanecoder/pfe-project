@@ -14,10 +14,14 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class VideoEntity {
+public class Video {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
-    private String url;
     private String titre;
+    private String description;
+    private String tags;
+    private String videoName;
+    private String addedDate;
+
 }

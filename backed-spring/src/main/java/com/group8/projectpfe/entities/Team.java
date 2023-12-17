@@ -3,7 +3,6 @@ package com.group8.projectpfe.entities;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.io.Serializable;
 import java.util.List;
 
 
@@ -12,11 +11,12 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Team{
+public class Team {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
 
     @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinColumn(name = "admin_id")
@@ -25,11 +25,7 @@ public class Team{
     @OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinColumn(name = "team_id")
     private List<User> members;
-
-    @Column(name = "logo")
     private String logo;
-
-    @Column(name = "description", columnDefinition = "TEXT")
     private String description;
 
     @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
@@ -38,5 +34,6 @@ public class Team{
     @ManyToOne
     @JoinColumn(name = "challenge_id")
     private Challenge challenge;
+
 
 }

@@ -1,39 +1,74 @@
 package com.group8.projectpfe.services.Impl;
 
-import com.group8.projectpfe.entities.VideoEntity;
+import com.group8.projectpfe.domain.dto.VideoDto;
+import com.group8.projectpfe.entities.Video;
+import com.group8.projectpfe.exception.ResourceNotFound;
+import com.group8.projectpfe.mappers.impl.VideoMapperImpl;
 import com.group8.projectpfe.repositories.VideoRepository;
 import com.group8.projectpfe.services.VideoService;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class VideoServiceImpl implements VideoService {
     private final VideoRepository videoRepository;
-    @Override
-    public VideoEntity createVideo(VideoEntity videoEntity) {
-        return videoRepository.save(videoEntity);
+    private final VideoMapperImpl videoMapper;
+    public VideoDto createVideo(VideoDto videoDto) {
+        if (videoDto.getTitre().isEmpty()) {
+            throw new ResourceNotFound(false, "Video title can not be null");
+        }
+
+        try {
+            Video video = videoMapper.mapFrom(videoDto);
+            Video savedVideo = videoRepository.save(video);
+            return videoMapper.mapTo(savedVideo);
+        } catch (Exception e) {
+            throw new ResourceNotFound(false, "Something went wrong while creating the video");
+        }
     }
 
-    @Override
-    public VideoEntity getVideoById(Integer id) {
-        return videoRepository.findById(id).orElseThrow();
+    public VideoDto getVideoById(Integer id) {
+        Video video = videoRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFound(false, "Video not found with id: " + id));
+        return videoMapper.mapTo(video);
     }
 
-    @Override
-    public VideoEntity updateVideo(Integer id, VideoEntity videoEntity) {
-        return null;
+    public VideoDto updateVideo(Integer id, VideoDto videoDto) {
+        if (videoDto.getTitre().isEmpty()) {
+            throw new ResourceNotFound(false, "Video title can not be null");
+        }
+
+        try {
+            Video existingVideo = videoRepository.findById(id)
+                    .orElseThrow(() -> new ResourceNotFound(false, "Video not found with id: " + id));
+
+            existingVideo.setTitre(videoDto.getTitre());
+            existingVideo.setDescription(videoDto.getDescription());
+
+            Video updatedVideo = videoRepository.save(existingVideo);
+            return videoMapper.mapTo(updatedVideo);
+        } catch (Exception e) {
+            throw new ResourceNotFound(false, "Something went wrong while updating the video");
+        }
     }
 
-    @Override
-    public List<VideoEntity> getAllVideos() {
-        return videoRepository.findAll();
+    public List<VideoDto> getAllVideos() {
+        List<Video> videos = videoRepository.findAll();
+
+        return videos.stream()
+                .map(videoMapper::mapTo)
+                .collect(Collectors.toList());
     }
 
-    @Override
     public void deleteVideo(Integer id) {
-            videoRepository.deleteById(id);
+        if (!videoRepository.existsById(id)) {
+            throw new ResourceNotFound(false, "Video not found with id: " + id);
+        }
+        videoRepository.deleteById(id);
     }
 }

@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("api/v1/auth")
 public class AuthenticationController {
     private final AuthService authService;
-    private final LogoutService logoutService;
+
     @PostMapping("/register")
     public ResponseEntity<AuthenticationResponse> register(@RequestBody RegisterRequest request){
         return new ResponseEntity<>(authService.register(request), HttpStatus.OK);

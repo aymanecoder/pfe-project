@@ -22,10 +22,11 @@ import java.util.logging.Logger;
 @RequiredArgsConstructor
 @RequestMapping("api/v1/coachs")
 public class CoachController {
-    private static final Logger LOGGER = Logger.getLogger(CoachController.class.getName());
+
     private final CoachService coachService;
-private final JwtService jwtService;
+    private final JwtService jwtService;
     private final ImageService imageService;
+
     @GetMapping("")
     public ResponseEntity<List<CoachDTO>> getCoachs(){
         List<CoachDTO> athletes = coachService.getCoachs();
