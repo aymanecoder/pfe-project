@@ -28,7 +28,7 @@ public class ChallengeMapperImpl implements Mapper<Challenge, ChallengeDTO> {
 
         ChallengeDTO challengeDTO= modelMapper.map(challenge, ChallengeDTO.class);
 
-        SportDTO sportDTO=sportMapper.mapTo(team.getSport());
+        SportDTO sportDTO=sportMapper.mapTo(challenge.getSport());
         List<Team> teamList = challenge.getTeams();
         List<TeamDTO> teamDTOList = teamList.stream()
                 .map(teamMapper::mapTo)

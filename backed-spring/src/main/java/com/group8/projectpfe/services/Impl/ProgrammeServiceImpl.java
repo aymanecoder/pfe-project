@@ -1,9 +1,13 @@
 package com.group8.projectpfe.services.Impl;
 import com.group8.projectpfe.domain.dto.ProgrammeDTO;
 import com.group8.projectpfe.entities.Programme;
+import com.group8.projectpfe.entities.TypeProgram;
 import com.group8.projectpfe.mappers.impl.ProgrammeMapperImpl;
+import com.group8.projectpfe.mappers.impl.SportifMapper;
 import com.group8.projectpfe.repositories.ProgrammeRepository;
 import com.group8.projectpfe.services.ProgrammeService;
+import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,15 +18,14 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-
+@RequiredArgsConstructor
 public class ProgrammeServiceImpl implements ProgrammeService {
 
 
-    @Autowired
-    private ProgrammeRepository programmeRepository;
+    private final ProgrammeRepository programmeRepository;
 
-    @Autowired
-    private ProgrammeMapperImpl programmeMapper;
+    private final ProgrammeMapperImpl programmeMapper;
+    private final ModelMapper modelMapper;
 
 
 
@@ -54,19 +57,13 @@ public class ProgrammeServiceImpl implements ProgrammeService {
     @Override
     public ProgrammeDTO createProgramme(ProgrammeDTO programmeDetails) {
         // Mapping ProgrammeDTO to Programme entity
-        Programme programmeToCreate = new Programme();
-        programmeToCreate.setUrl(programmeDetails.getUrl());
-        programmeToCreate.setTitle(programmeDetails.getTitle());
-        programmeToCreate.setTypeProgramme(programmeDetails.getTypeProgramme());
-
+        Programme programmeToCreate=new Programme();
+        modelMapper.map(programmeDetails, programmeToCreate);
         // Save Programme entity
         Programme savedProgramme = programmeRepository.save(programmeToCreate);
-        ProgrammeDTO savedProgrammeDTO = new ProgrammeDTO();
-        savedProgrammeDTO.setUrl(savedProgramme.getUrl());
-        savedProgrammeDTO.setTitle(savedProgramme.getTitle());
 
-        savedProgrammeDTO.setTypeProgramme(savedProgramme.getTypeProgramme());
-        return savedProgrammeDTO;
+        modelMapper.map(programmeToCreate, programmeDetails);
+        return programmeDetails;
     }
 
     @Override
@@ -75,9 +72,7 @@ public class ProgrammeServiceImpl implements ProgrammeService {
 
         if (optionalProgramme.isPresent()) {
             Programme existingProgramme = optionalProgramme.get();
-            existingProgramme.setUrl(updatedProgrammeDetails.getUrl());
-            existingProgramme.setTitle(updatedProgrammeDetails.getTitle());
-            existingProgramme.setTypeProgramme(updatedProgrammeDetails.getTypeProgramme());
+            modelMapper.map(updatedProgrammeDetails, existingProgramme);
             Programme updatedProgramme = programmeRepository.save(existingProgramme);
             return programmeMapper.mapTo(updatedProgramme);
         } else {

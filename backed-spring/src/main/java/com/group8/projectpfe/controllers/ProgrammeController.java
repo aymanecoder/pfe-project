@@ -1,25 +1,27 @@
 package com.group8.projectpfe.controllers;
 
 import com.group8.projectpfe.domain.dto.ProgrammeDTO;
+import com.group8.projectpfe.services.Impl.ImageService;
 import com.group8.projectpfe.services.ProgrammeService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
 @RestController
+
+@RequiredArgsConstructor
 @RequestMapping("/api/v1/programmes")
 public class ProgrammeController {
 
     private final ProgrammeService programmeService;
-
-    @Autowired
-    public ProgrammeController(ProgrammeService programmeService) {
-        this.programmeService = programmeService;
-    }
+    private final ImageService imageService;
 
     @GetMapping
     public ResponseEntity<List<ProgrammeDTO>> getAllProgrammes() {
@@ -35,14 +37,38 @@ public class ProgrammeController {
     }
 
     @PostMapping
-    public ResponseEntity<ProgrammeDTO> createProgramme(@RequestBody ProgrammeDTO programmeDetails) {
+    public ResponseEntity<ProgrammeDTO> createProgramme(@RequestParam("program") MultipartFile program,@ModelAttribute ProgrammeDTO programmeDetails) {
+        if (!program.isEmpty()) {
+            try {
+                String imagePath = imageService.saveImage(program); // Save the image and get the generated file path
+                if (programmeDetails.getPicturePath() != null) {
+                    imageService.deleteProfile(programmeDetails.getPicturePath()); // Delete the old profile picture
+                }
+                programmeDetails.setPicturePath(imagePath); // Set the image path in the DTO instead of the byte array
+            } catch (IOException e) {
+                // Handle file processing error
+                return new ResponseEntity<>( HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+        }
         ProgrammeDTO createdProgramme = programmeService.createProgramme(programmeDetails);
         return new ResponseEntity<>(createdProgramme, HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<ProgrammeDTO> updateProgramme(
-            @PathVariable Long id, @RequestBody ProgrammeDTO updatedProgrammeDetails) {
+            @PathVariable Long id,@RequestParam("program") MultipartFile program, @ModelAttribute ProgrammeDTO updatedProgrammeDetails) {
+        if (!program.isEmpty()) {
+            try {
+                String imagePath = imageService.saveImage(program); // Save the image and get the generated file path
+                if (updatedProgrammeDetails.getPicturePath() != null) {
+                    imageService.deleteProfile(updatedProgrammeDetails.getPicturePath()); // Delete the old profile picture
+                }
+                updatedProgrammeDetails.setPicturePath(imagePath); // Set the image path in the DTO instead of the byte array
+            } catch (IOException e) {
+                // Handle file processing error
+                return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+        }
         ProgrammeDTO updatedProgramme = programmeService.updateProgramme(id, updatedProgrammeDetails);
         if (updatedProgramme != null) {
             return new ResponseEntity<>(updatedProgramme, HttpStatus.OK);
@@ -52,8 +78,14 @@ public class ProgrammeController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteProgramme(@PathVariable Long id) {
+    public ResponseEntity<String> deleteProgramme(@PathVariable Long id) throws IOException {
+        ProgrammeDTO programmeDTO = programmeService.getProgrammeById(Long.valueOf(id)).orElse(null);
+        if (programmeDTO != null){
+        imageService.deleteProfile(programmeDTO.getPicturePath());
         programmeService.deleteProgramme(id);
+        }else{
+            return new ResponseEntity<>("Unauthorized delete or sportif not found", HttpStatus.NOT_FOUND);
+        }
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
