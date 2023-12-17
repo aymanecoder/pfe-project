@@ -69,7 +69,12 @@ public class ImageService {
         if (resource.exists() && resource.isReadable()) {
             Files.delete(imagePath);
         } else {
+
             //    throw new RuntimeException("File cannot be deleted or does not exist");
         }
     }
+
+
 }
+
+

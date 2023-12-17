@@ -1,14 +1,17 @@
 package com.group8.projectpfe.domain.dto;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 @Builder
 @Setter
 @Getter
+@AllArgsConstructor
+@NoArgsConstructor
 public class VideoDto {
-    private Integer id;
-    private String url;
+    private int id;
     private String titre;
+    private String description;
+    private String tags;
+    private String videoName;
+    private String addedDate;
 }

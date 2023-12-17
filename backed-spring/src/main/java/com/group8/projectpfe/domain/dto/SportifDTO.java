@@ -18,4 +18,6 @@ public class SportifDTO {
     private Integer taille;
     private Integer poids;
     private String PicturePath;
+
 }
+

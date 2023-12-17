@@ -28,7 +28,7 @@ import java.util.logging.Logger;
 public class SportifController {
     private static final Logger LOGGER = Logger.getLogger(SportifController.class.getName());
     private final SportifService sportifService;
-    private final JwtService jwtService;
+
     private final ImageService imageService;
     @GetMapping("")
     public ResponseEntity<List<SportifDTO>> getSportifs(){
@@ -109,3 +109,4 @@ public class SportifController {
 
 
 }
+

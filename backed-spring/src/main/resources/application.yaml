@@ -11,6 +11,19 @@ spring:
     hibernate:
       ddl-auto: create
     show-sql: true
+
 image:
   upload:
     directory: uploads/
+
+  servlet:
+    multipart:
+      file-size-threshold: 2KB
+      max-file-size: 200MB
+      max-request-size: 215MB
+      enabled: true
+
+
+project:
+  video: videos/
+

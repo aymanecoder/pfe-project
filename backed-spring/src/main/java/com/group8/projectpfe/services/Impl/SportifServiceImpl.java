@@ -6,6 +6,7 @@ import com.group8.projectpfe.entities.User;
 import com.group8.projectpfe.repositories.UserRepository;
 import com.group8.projectpfe.services.SportifService;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -21,6 +22,7 @@ public class SportifServiceImpl implements SportifService {
     private final SportifMapper sportifMapper;
     private final ModelMapper modelMapper;
     @Override
+    @Transactional
     public List<SportifDTO> getSportifs() {
         List<User> users=userRepository.findByRole(Role.USER);
         return users.stream()
@@ -28,6 +30,7 @@ public class SportifServiceImpl implements SportifService {
                 .collect(Collectors.toList());
     }
     @Override
+    @Transactional
     public SportifDTO getSportifById(Long sportifId) {
         Optional<User> sportif = userRepository.findByIdAndRole(sportifId, Role.USER);
         return sportif.map(sportifMapper::mapTo).orElse(null);
@@ -37,12 +40,9 @@ public class SportifServiceImpl implements SportifService {
     public void deleteSportif(Integer id, Integer userId) {
         // Fetch the Sportif by ID
         User sportif = userRepository.findByIdAndRole(Long.valueOf(id),Role.USER).orElse(null);
-
         if (sportif != null && sportif.getId().equals(userId)) {
-            // Check if the user associated with the Sportif matches the authenticated user
             userRepository.delete(sportif); // Or perform any deletion logic
         } else {
-            // Handle unauthorized deletion or sportif not found
             throw new IllegalStateException("Unauthorized deletion or sportif not found");
         }
     }
@@ -50,15 +50,10 @@ public class SportifServiceImpl implements SportifService {
     @Override
     public void updateSportif(SportifDTO sportifDTO) {
         User existingSportif = userRepository.findByIdAndRole(Long.valueOf(sportifDTO.getId()),Role.USER).orElse(null);
-
         if (existingSportif != null) {
-            // Map the updated data from DTO to the existing sportif entity
-            //existingSportif=sportifMapper.mapFrom(sportifDTO);
             modelMapper.map(sportifDTO, existingSportif);
-            // Save the updated sportif entity
             userRepository.save(existingSportif);
         } else {
-            // Handle cases where the sportif to be updated is not found
             throw new EntityNotFoundException("Sportif not found with ID: " + sportifDTO.getId());
         }
     }

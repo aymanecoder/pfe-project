@@ -1,9 +1,7 @@
 package com.group8.projectpfe.mappers.impl;
 
 import com.group8.projectpfe.domain.dto.SportifDTO;
-import com.group8.projectpfe.domain.dto.VideoDto;
 import com.group8.projectpfe.entities.User;
-import com.group8.projectpfe.entities.VideoEntity;
 import com.group8.projectpfe.mappers.Mapper;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -20,6 +18,11 @@ public class SportifMapper implements Mapper<User, SportifDTO> {
 
     @Override
     public User mapFrom(SportifDTO sportifDTO) {
-        return modelMapper.map(sportifDTO,User.class);
+        if (sportifDTO == null) {
+            throw new NullPointerException("Input TeamDTO cannot be null");
+        }
+
+        User user = modelMapper.map(sportifDTO, User.class);
+        return user;
     }
 }
