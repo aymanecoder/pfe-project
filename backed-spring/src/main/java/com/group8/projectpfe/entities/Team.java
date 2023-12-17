@@ -16,7 +16,6 @@ public class Team{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "team_id")
     private Integer id;
 
     @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
@@ -33,7 +32,7 @@ public class Team{
     @Column(name = "description", columnDefinition = "TEXT")
     private String description;
 
-    @OneToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     private Sport sport;
 
     @ManyToOne

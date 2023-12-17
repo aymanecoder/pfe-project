@@ -20,6 +20,6 @@ public class Challenge{
     @JoinColumn(name = "challenge_id")
     private List<Team> Teams;
 
-    @OneToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     private Sport sport;
 }
