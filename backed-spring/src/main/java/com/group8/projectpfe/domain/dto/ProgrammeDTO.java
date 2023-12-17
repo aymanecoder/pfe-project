@@ -15,5 +15,6 @@ public class ProgrammeDTO {
     private String title;
     private String typeProgramme;
     private String  PicturePath;
+
 }
 
