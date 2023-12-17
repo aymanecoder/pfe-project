@@ -12,7 +12,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class TeamDTO {
-
+    private Integer id;
     private SportifDTO admin;
     private List<SportifDTO> members;
     private String logo;

@@ -1,13 +1,13 @@
 package com.group8.projectpfe.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.group8.projectpfe.domain.dto.ChallengeDTO;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @Entity
 @Data
@@ -20,5 +20,11 @@ public class Sport {
     private Integer id;
     private String name;
     private String description;
+
+    @OneToMany(mappedBy = "sport", cascade = CascadeType.ALL)
+    private List<Team> teams;
+
+    @OneToMany(mappedBy = "sport", cascade = CascadeType.ALL)
+    private List<Challenge> challenges;
 
 }
