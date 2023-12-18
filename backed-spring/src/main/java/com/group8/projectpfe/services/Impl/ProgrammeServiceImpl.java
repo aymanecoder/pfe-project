@@ -57,7 +57,6 @@ public class ProgrammeServiceImpl implements ProgrammeService {
     @Override
     public ProgrammeDTO createProgramme(ProgrammeDTO programmeDetails) {
         // Mapping ProgrammeDTO to Programme entity
-<<<<<<< HEAD
         Programme programmeToCreate=new Programme();
         modelMapper.map(programmeDetails, programmeToCreate);
         // Save Programme entity
