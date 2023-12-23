@@ -34,6 +34,8 @@ public class Team {
     @ManyToOne
     @JoinColumn(name = "challenge_id")
     private Challenge challenge;
-
+    @ManyToOne
+    @JoinColumn(name = "match_id")
+    private Match match;
 
 }

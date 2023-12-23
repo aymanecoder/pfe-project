@@ -27,3 +27,7 @@ image:
 project:
   video: videos/
 
+#logging:
+#  level:
+#    org:
+#      springframework: DEBUG

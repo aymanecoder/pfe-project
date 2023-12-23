@@ -1,14 +1,13 @@
 package com.group8.projectpfe.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @AllArgsConstructor
@@ -17,11 +16,24 @@ import java.util.List;
 @Data
 public class Match {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    private String titre;
+
+    private String title;
     private String description;
     private int score;
-    @OneToMany
+    private boolean isPrivate;
+
+    @OneToMany(mappedBy = "match")
     private List<Team> teams;
 
+    @ManyToMany(cascade = CascadeType.ALL)
+    private List<User> participants;
+
+    @ManyToOne
+    private Sport typeDeSport;
 }
+
+
+
+
