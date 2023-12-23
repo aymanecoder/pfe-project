@@ -24,11 +24,11 @@ public class Match {
     private int score;
     private boolean isPrivate;
 
-    @OneToMany(mappedBy = "match", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "match", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Team> teams;
 
 
-    @ManyToMany(cascade = {CascadeType.ALL, CascadeType.MERGE})
+    @ManyToMany(cascade = CascadeType.DETACH)
     private List<User> participants;
 
 

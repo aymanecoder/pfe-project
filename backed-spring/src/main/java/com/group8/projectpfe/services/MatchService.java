@@ -14,7 +14,7 @@ public interface MatchService {
     MatchDto createMatch(MatchDto MatchDto);
 
     @Transactional
-    public MatchDto updateMatch(MatchDto matchDto) ;
+    MatchDto updateMatch(int matchId, MatchDto updatedMatchDto);
 
     void deleteMatch(Integer matchId);
 }
