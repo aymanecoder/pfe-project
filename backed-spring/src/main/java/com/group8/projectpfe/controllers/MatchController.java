@@ -14,6 +14,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class MatchController {
 
+
     private final MatchService matchService;
 
 
@@ -36,9 +37,10 @@ public class MatchController {
     }
 
 
-    @PutMapping("/{matchId}")
-    public ResponseEntity<MatchDto> updateMatch(@PathVariable int matchId, @RequestBody MatchDto updatedMatchDto) {
-        MatchDto updatedMatch = matchService.updateMatch(matchId, updatedMatchDto);
+    @PutMapping("/{id}")
+    public ResponseEntity<MatchDto> updateMatch(@PathVariable Integer id, @RequestBody MatchDto matchDto) {
+        matchDto.setId(id); // Set the ID from the path variable to the DTO
+        MatchDto updatedMatch = matchService.updateMatch(matchDto);
         return ResponseEntity.ok(updatedMatch);
     }
 

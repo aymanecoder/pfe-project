@@ -21,4 +21,7 @@ public class Challenge{
 
     @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     private Sport sport;
+
+
+    private String  logoPath;
 }

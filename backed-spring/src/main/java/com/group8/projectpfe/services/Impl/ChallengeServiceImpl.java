@@ -60,7 +60,7 @@ public class ChallengeServiceImpl implements ChallengeService {
         }
 
         challengeToCreate.setTeams(teams);
-
+        challengeToCreate.setLogoPath(challengeToCreate.getLogoPath());
         Challenge savedChallenge = challengeRepository.save(challengeToCreate);
         return challengeMapper.mapTo(savedChallenge);
     }
@@ -80,7 +80,7 @@ public class ChallengeServiceImpl implements ChallengeService {
                     .collect(Collectors.toList());
             List<Team> teams = teamRepository.findAllById(teamTds);
             existingChallenge.setTeams(teams);
-
+            existingChallenge.setLogoPath(updatedChallengeDetails.getLogoPath());
             Challenge updatedChallenge = challengeRepository.save(existingChallenge);
             return challengeMapper.mapTo(updatedChallenge);
         } else {

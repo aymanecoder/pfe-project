@@ -25,8 +25,9 @@ public class Team {
     @OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinColumn(name = "team_id")
     private List<User> members;
-    private String logo;
     private String description;
+
+    private String  logoPath;
 
     @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     private Sport sport;

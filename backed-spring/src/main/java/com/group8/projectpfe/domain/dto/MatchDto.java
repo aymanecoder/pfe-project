@@ -20,7 +20,7 @@ public class MatchDto {
     private boolean isPrivate;
     private List<TeamDTO> teams;
     private List<SportifDTO> participants;
-    private SportDTO typeDeSport;
+    private SportDTO sport;
 
 
 }

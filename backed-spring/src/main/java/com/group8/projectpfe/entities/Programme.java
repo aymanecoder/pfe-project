@@ -14,9 +14,11 @@ public class Programme{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String url;
+    private String descreption;
     private String title;
-    private String typeProgramme;
+    @Enumerated(EnumType.STRING)
+    private TypeProgram typeProgramme;
+    private String  PicturePath;
 }
 
 

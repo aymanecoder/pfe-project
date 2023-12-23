@@ -22,6 +22,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class MatchMapperImpl implements Mapper<Match, MatchDto> {
 
+
     private final ModelMapper modelMapper;
     private final TeamMapperImpl teamMapper;
     private final SportMapperImpl sportMapper;
@@ -43,11 +44,11 @@ public class MatchMapperImpl implements Mapper<Match, MatchDto> {
                 .map(this::mapSportifToDTO)
                 .collect(Collectors.toList());
 
-        SportDTO sportDTO = mapSportToDTO(match.getTypeDeSport());
+        SportDTO sportDTO = mapSportToDTO(match.getSport());
 
         matchDto.setTeams(teamDTOList);
         matchDto.setParticipants(participantDTOList);
-        matchDto.setTypeDeSport(sportDTO);
+        matchDto.setSport(sportDTO);
 
         return matchDto;
     }
@@ -64,11 +65,11 @@ public class MatchMapperImpl implements Mapper<Match, MatchDto> {
                 .map(this::mapSportifDTOToEntity)
                 .collect(Collectors.toList());
 
-        Sport sport = mapSportDTOToEntity(matchDto.getTypeDeSport());
+        Sport sport = mapSportDTOToEntity(matchDto.getSport());
 
         match.setTeams(teamList);
         match.setParticipants(participantList);
-        match.setTypeDeSport(sport);
+        match.setSport(sport);
 
         return match;
     }
@@ -84,11 +85,11 @@ public class MatchMapperImpl implements Mapper<Match, MatchDto> {
                 .map(this::mapSportifDTOToEntity)
                 .collect(Collectors.toList());
 
-        Sport sport = mapSportDTOToEntity(matchDto.getTypeDeSport());
+        Sport sport = mapSportDTOToEntity(matchDto.getSport());
 
         match.setTeams(teamList);
         match.setParticipants(participantList);
-        match.setTypeDeSport(sport);
+        match.setSport(sport);
     }
 
     public TeamDTO mapTeamToDTO(Team team) {

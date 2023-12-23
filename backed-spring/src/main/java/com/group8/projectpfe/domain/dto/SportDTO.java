@@ -11,4 +11,5 @@ public class SportDTO {
     private Integer id;
     private String name;
     private String description;
+    private String  logoPath;
 }
