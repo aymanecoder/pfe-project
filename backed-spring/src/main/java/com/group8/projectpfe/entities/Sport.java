@@ -21,7 +21,7 @@ public class Sport {
     private Integer id;
     private String name;
     private String description;
-
+    private String  logoPath;
     @OneToMany(mappedBy = "sport", cascade = CascadeType.ALL)
     private List<Team> teams;
 

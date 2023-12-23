@@ -15,6 +15,7 @@ import com.group8.projectpfe.repositories.TeamRepository;
 import com.group8.projectpfe.repositories.UserRepository;
 import com.group8.projectpfe.services.TeamService;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -32,6 +33,8 @@ public class TeamServiceImpl implements TeamService {
     private final SportRepository sportRepository;
     private final UserRepository userRepository;
     private final TeamMapperImpl teamMapper;
+
+    private final ModelMapper modelMapper;
 
     @Override
     public List<TeamDTO> getAllTeams() {
@@ -93,7 +96,7 @@ public class TeamServiceImpl implements TeamService {
             List<User> members = userRepository.findAllById(memberIds);
             existingTeam.setMembers(members);
 
-            existingTeam.setLogo(updatedTeamDetails.getLogo());
+            existingTeam.setLogoPath(updatedTeamDetails.getLogoPath());
             existingTeam.setDescription(updatedTeamDetails.getDescription());
 
             Team updatedTeam = teamRepository.save(existingTeam);
