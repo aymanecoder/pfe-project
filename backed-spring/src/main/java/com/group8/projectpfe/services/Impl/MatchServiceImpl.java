@@ -1,6 +1,8 @@
 package com.group8.projectpfe.services.Impl;
 
 import com.group8.projectpfe.domain.dto.MatchDto;
+import com.group8.projectpfe.domain.dto.SportifDTO;
+import com.group8.projectpfe.domain.dto.TeamDTO;
 import com.group8.projectpfe.entities.Match;
 import com.group8.projectpfe.entities.Sport;
 import com.group8.projectpfe.entities.Team;
@@ -20,6 +22,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -53,63 +56,69 @@ public class MatchServiceImpl implements MatchService {
     @Override
     @Transactional
     public MatchDto createMatch(MatchDto matchDto) {
-        Match match;
 
-        if (matchDto.getId() != null) {
-            // Existing match, load from the database
-            match = matchRepository.findById(matchDto.getId())
-                    .orElseThrow(() -> new EntityNotFoundException("Match not found with ID: " + matchDto.getId()));
+        Match matchToCreate = matchMapper.mapFrom(matchDto);
 
-            // Update fields from the DTO
-            matchMapper.updateMatchFromDto(matchDto, match);
-
-            // Update teams
-            List<Team> teams = matchDto.getTeams().stream()
-                    .map(teamDto -> teamRepository.findById(teamDto.getId())
-                            .orElseThrow(() -> new EntityNotFoundException("Team not found with ID: " + teamDto.getId())))
-                    .collect(Collectors.toList());
-
-            match.setTeams(teams);
-
-            // Update participants
-            List<User> participants = matchDto.getParticipants().stream()
-                    .map(userDto -> userRepository.findById(userDto.getId())
-                            .orElseThrow(() -> new EntityNotFoundException("User not found with ID: " + userDto.getId())))
-                    .collect(Collectors.toList());
-
-            match.setParticipants(participants);
-
-            // Update sport
-            Sport existingSport = sportRepository.findById(matchDto.getTypeDeSport().getId())
-                    .orElseThrow(() -> new EntityNotFoundException("Sport not found with ID: " + matchDto.getTypeDeSport().getId()));
-            match.setTypeDeSport(existingSport);
-
-        } else {
-            // New match, create a new entity
-            match = matchMapper.mapFrom(matchDto);
+        List<Team> teams = new ArrayList<>();
+        for (Team team : matchToCreate.getTeams()) {
+            Team managedTeam = teamRepository.getById(team.getId());
+            teams.add(managedTeam);
         }
 
-        // Save the Match
-        Match savedMatch = matchRepository.save(match);
+        matchToCreate.setTeams(teams);
+         // Update participants
+        List<User> managedMembers = new ArrayList<>();
+        for (SportifDTO member : matchDto.getParticipants()) {
+            User managedMember = userRepository.getById(member.getId());
+            managedMembers.add(managedMember);
+        }
+
+        matchToCreate.setParticipants(managedMembers);
+
+        // Retrieve the existing sport from the database
+        Sport existingSport = sportRepository.findById(matchToCreate.getSport().getId()).orElse(null);
+
+        if (existingSport != null) {
+            matchToCreate.setSport(existingSport);
+        }
+        Match savedMatch = matchRepository.save(matchToCreate);
         return matchMapper.mapTo(savedMatch);
     }
 
 
     @Override
-    public MatchDto updateMatch(MatchDto matchDto) {
-        Match existingMatch = matchRepository.findById(matchDto.getId())
-                .orElseThrow(() -> new EntityNotFoundException("Match not found with ID: " + matchDto.getId()));
+    public MatchDto updateMatch(MatchDto updatedMatchDetails) {
+        Optional<Match> optionalMatch = matchRepository.findById(updatedMatchDetails.getId());
 
-        // Update existingMatch with data from matchDto
-        matchMapper.updateMatchFromDto(matchDto, existingMatch);
+        if (optionalMatch.isPresent()) {
+            Match existingMatch = optionalMatch.get();
 
-        // Reattach detached User entities to the persistence context
-        userRepository.saveAll(existingMatch.getParticipants());
 
-        // Save the updated Match
-        Match savedMatch = matchRepository.save(existingMatch);
 
-        return matchMapper.mapTo(savedMatch);
+            Sport sport = sportRepository.getReferenceById(updatedMatchDetails.getSport().getId());
+            existingMatch.setSport(sport);
+            // Assuming you're getting the members as a list of User IDs in the DTO
+            List<Integer> memberIds = updatedMatchDetails.getParticipants().stream()
+                    .map(SportifDTO::getId) // Assuming getId() returns the user ID as an Integer
+                    .collect(Collectors.toList());
+            List<User> members = userRepository.findAllById(memberIds);
+            existingMatch.setParticipants(members);
+
+            List<Integer> teamIds = updatedMatchDetails.getTeams().stream()
+                    .map(TeamDTO::getId) // Assuming getId() returns the user ID as an Integer
+                    .collect(Collectors.toList());
+            List<Team> teams = teamRepository.findAllById(teamIds);
+            existingMatch.setTeams(teams);
+//
+//            existingMatch.setLogoPath(updatedMatchDetails.getLogoPath());
+            existingMatch.setDescription(updatedMatchDetails.getDescription());
+
+            Match updatedMatch = matchRepository.save(existingMatch);
+            return matchMapper.mapTo(updatedMatch);
+        } else {
+            // Handle scenario when the team with the given ID is not found
+            return null;
+        }
     }
 
 

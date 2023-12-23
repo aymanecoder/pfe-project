@@ -24,16 +24,19 @@ public class Match {
     private int score;
     private boolean isPrivate;
 
-    @OneToMany(mappedBy = "match", cascade = CascadeType.ALL)
+    @OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @JoinColumn(name = "match_id")
     private List<Team> teams;
 
 
-    @ManyToMany(cascade = {CascadeType.ALL, CascadeType.MERGE})
+    @OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @JoinColumn(name = "match_id")
     private List<User> participants;
 
 
     @ManyToOne
-    private Sport typeDeSport;
+    @JoinColumn(name = "sport_id")
+    private Sport sport;
 }
 
 

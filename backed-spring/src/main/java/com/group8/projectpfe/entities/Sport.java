@@ -26,6 +26,9 @@ public class Sport {
     private List<Team> teams;
 
     @OneToMany(mappedBy = "sport", cascade = CascadeType.ALL)
+    private List<Match> matches;
+
+    @OneToMany(mappedBy = "sport", cascade = CascadeType.ALL)
     private List<Challenge> challenges;
 
 }
