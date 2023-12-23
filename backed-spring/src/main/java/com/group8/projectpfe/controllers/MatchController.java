@@ -2,6 +2,7 @@ package com.group8.projectpfe.controllers;
 
 import com.group8.projectpfe.domain.dto.MatchDto;
 import com.group8.projectpfe.services.MatchService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -10,13 +11,11 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/matches")
+@RequiredArgsConstructor
 public class MatchController {
 
     private final MatchService matchService;
 
-    public MatchController(MatchService matchService) {
-        this.matchService = matchService;
-    }
 
     @GetMapping("/{matchId}")
     public ResponseEntity<MatchDto> getMatchById(@PathVariable Integer matchId) {
@@ -36,9 +35,11 @@ public class MatchController {
         return new ResponseEntity<>(createdMatch, HttpStatus.CREATED);
     }
 
-    @PutMapping("/{matchId}")
-    public ResponseEntity<MatchDto> updateMatch(@PathVariable Integer matchId, @RequestBody MatchDto MatchDto) {
-        MatchDto updatedMatch = matchService.updateMatch(matchId, MatchDto);
+
+    @PutMapping("/{id}")
+    public ResponseEntity<MatchDto> updateMatch(@PathVariable Integer id, @RequestBody MatchDto matchDto) {
+        matchDto.setId(id); // Set the ID from the path variable to the DTO
+        MatchDto updatedMatch = matchService.updateMatch(matchDto);
         return ResponseEntity.ok(updatedMatch);
     }
 

@@ -46,6 +46,9 @@ public class User implements UserDetails {
     @ManyToOne
     @JoinColumn(name = "team_id")
     private Team team;
+    @ManyToOne
+    @JoinColumn(name = "match_id")
+    private Match match;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

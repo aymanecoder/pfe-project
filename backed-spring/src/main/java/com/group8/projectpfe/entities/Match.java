@@ -16,7 +16,7 @@ import java.util.Set;
 @Data
 public class Match {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
     private String title;
@@ -24,11 +24,13 @@ public class Match {
     private int score;
     private boolean isPrivate;
 
-    @OneToMany(mappedBy = "match")
+    @OneToMany(mappedBy = "match", cascade = CascadeType.ALL)
     private List<Team> teams;
 
-    @ManyToMany(cascade = CascadeType.ALL)
+
+    @ManyToMany(cascade = {CascadeType.ALL, CascadeType.MERGE})
     private List<User> participants;
+
 
     @ManyToOne
     private Sport typeDeSport;
