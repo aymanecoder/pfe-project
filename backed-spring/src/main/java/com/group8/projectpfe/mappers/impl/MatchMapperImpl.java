@@ -27,10 +27,6 @@ public class MatchMapperImpl implements Mapper<Match, MatchDto> {
     private final TeamMapperImpl teamMapper;
     private final SportMapperImpl sportMapper;
 
-
-
-
-
     @Override
     public MatchDto mapTo(Match match) {
         MatchDto matchDto = modelMapper.map(match, MatchDto.class);

@@ -35,14 +35,11 @@ public class User implements UserDetails {
     private Integer age;
     private Integer taille;
     private Integer poids;
-
     private String  PicturePath;
     @Enumerated(EnumType.STRING)
     private Role role;
-
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Token> tokens;
-
     @ManyToOne
     @JoinColumn(name = "team_id")
     private Team team;
