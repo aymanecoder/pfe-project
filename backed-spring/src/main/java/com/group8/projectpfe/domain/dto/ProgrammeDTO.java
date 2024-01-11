@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ProgrammeDTO {
+    private int id;
     private String descreption;
     private String title;
     private String typeProgramme;
