@@ -35,20 +35,20 @@ public class User implements UserDetails {
     private Integer age;
     private Integer taille;
     private Integer poids;
-
     private String  PicturePath;
     @Enumerated(EnumType.STRING)
     private Role role;
-
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Token> tokens;
-
     @ManyToOne
     @JoinColumn(name = "team_id")
     private Team team;
     @ManyToOne
     @JoinColumn(name = "match_id")
     private Match match;
+    @ManyToOne
+    @JoinColumn(name = "group_id")
+    private Group group;
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority(role.name()));

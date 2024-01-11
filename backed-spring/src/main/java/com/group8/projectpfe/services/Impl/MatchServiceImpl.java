@@ -3,11 +3,9 @@ package com.group8.projectpfe.services.Impl;
 import com.group8.projectpfe.domain.dto.MatchDto;
 import com.group8.projectpfe.domain.dto.SportifDTO;
 import com.group8.projectpfe.domain.dto.TeamDTO;
-import com.group8.projectpfe.entities.Match;
-import com.group8.projectpfe.entities.Sport;
-import com.group8.projectpfe.entities.Team;
-import com.group8.projectpfe.entities.User;
+import com.group8.projectpfe.entities.*;
 import com.group8.projectpfe.mappers.impl.MatchMapperImpl;
+import com.group8.projectpfe.mappers.impl.TeamMapperImpl;
 import com.group8.projectpfe.repositories.MatchRepository;
 import com.group8.projectpfe.repositories.SportRepository;
 import com.group8.projectpfe.repositories.TeamRepository;
@@ -20,6 +18,8 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -28,7 +28,6 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class MatchServiceImpl implements MatchService {
-
     private final MatchRepository matchRepository;
     private final MatchMapperImpl matchMapper;
     private final UserRepository userRepository;
@@ -49,10 +48,27 @@ public class MatchServiceImpl implements MatchService {
     public List<MatchDto> getAllMatches() {
         List<Match> matches = matchRepository.findAll();
         return matches.stream()
-                .map(matchMapper::mapTo)
+                .map(match -> {
+                    MatchDto matchDto = matchMapper.mapTo(match);
+
+                    if (match.getTypeMatch() == MatchType.UPCOMING) {
+                        matchDto.setDate(match.getDate()); // Set the actual date and time from your Match entity
+                        matchDto.setCounter(calculateMatchCounter(match)); // Implement a method to calculate the match counter
+                        matchDto.setScore(0); // Assuming default score for upcoming matches is 0
+                    } else {
+                        // For completed matches, set score
+                        // Assuming your MatchDto has a setScore method
+                        matchDto.setScore(match.getScore());
+                    }
+
+                    return matchDto;
+                })
                 .collect(Collectors.toList());
     }
+    private int calculateMatchCounter(Match match) {
 
+        return (int) ChronoUnit.DAYS.between(LocalDateTime.now(), match.getDate());
+    }
     @Override
     @Transactional
     public MatchDto createMatch(MatchDto matchDto) {
@@ -66,7 +82,7 @@ public class MatchServiceImpl implements MatchService {
         }
 
         matchToCreate.setTeams(teams);
-         // Update participants
+        // Update participants
         List<User> managedMembers = new ArrayList<>();
         for (SportifDTO member : matchDto.getParticipants()) {
             User managedMember = userRepository.getById(member.getId());

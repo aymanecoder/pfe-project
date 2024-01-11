@@ -22,13 +22,10 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class MatchMapperImpl implements Mapper<Match, MatchDto> {
 
+
     private final ModelMapper modelMapper;
     private final TeamMapperImpl teamMapper;
     private final SportMapperImpl sportMapper;
-
-
-
-
 
     @Override
     public MatchDto mapTo(Match match) {

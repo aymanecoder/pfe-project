@@ -16,6 +16,7 @@ public interface ProgrammeService {
     void deleteProgramme(Long id);
 
     List<ProgrammeDTO> searchByTitle(String title);
+    List<ProgrammeDTO> getProgramsByTypeProgram(String typeProgram);
 
     // Other service methods can be declared here
 }

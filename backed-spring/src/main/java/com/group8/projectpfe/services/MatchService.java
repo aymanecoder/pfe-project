@@ -17,4 +17,6 @@ public interface MatchService {
     public MatchDto updateMatch(MatchDto matchDto) ;
 
     void deleteMatch(Integer matchId);
+
+
 }

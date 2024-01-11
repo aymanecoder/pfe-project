@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 
@@ -37,6 +38,10 @@ public class Match {
     @ManyToOne
     @JoinColumn(name = "sport_id")
     private Sport sport;
+
+    @Enumerated(EnumType.STRING)
+    private MatchType typeMatch;
+    private LocalDateTime date;
 }
 
 
