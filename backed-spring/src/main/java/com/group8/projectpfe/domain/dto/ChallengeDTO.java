@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Date;
 import java.util.List;
 @Data
 @NoArgsConstructor
@@ -16,4 +17,5 @@ public class ChallengeDTO {
     private SportDTO sport;
 
     private String  logoPath;
+    private Date creationDate;
 }

@@ -93,4 +93,10 @@ public class ProgrammeController {
         List<ProgrammeDTO> programmes = programmeService.searchByTitle(title);
         return new ResponseEntity<>(programmes, HttpStatus.OK);
     }
+    @GetMapping("/byTypeProgram/{typeProgram}")
+    public ResponseEntity<List<ProgrammeDTO>> getProgramsByTypeProgram(@PathVariable String typeProgram) {
+        List<ProgrammeDTO> programmes = programmeService.getProgramsByTypeProgram(typeProgram);
+        return new ResponseEntity<>(programmes, HttpStatus.OK);
+    }
+
 }
