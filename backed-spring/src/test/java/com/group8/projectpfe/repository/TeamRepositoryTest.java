@@ -26,10 +26,7 @@ class TeamRepositoryTest {
 
         teamRepository.saveAll(List.of(team1, team2));
 
-        // Act
         List<Team> foundTeams = teamRepository.findByDescription("Test Team 1");
-
-        // Assert
         assertNotNull(foundTeams);
         assertEquals(1, foundTeams.size());
         assertEquals("Test Team 1", foundTeams.get(0).getDescription());
