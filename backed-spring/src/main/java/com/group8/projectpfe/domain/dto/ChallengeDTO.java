@@ -15,7 +15,6 @@ public class ChallengeDTO {
     private int id;
     private List<TeamDTO> teams;
     private SportDTO sport;
-
     private String  logoPath;
     private Date creationDate;
 }

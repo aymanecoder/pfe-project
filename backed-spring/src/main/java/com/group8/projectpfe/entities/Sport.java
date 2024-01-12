@@ -7,6 +7,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -30,5 +31,6 @@ public class Sport {
 
     @OneToMany(mappedBy = "sport", cascade = CascadeType.ALL)
     private List<Challenge> challenges;
+
 
 }
