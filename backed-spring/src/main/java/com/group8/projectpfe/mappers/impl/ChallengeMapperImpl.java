@@ -27,30 +27,37 @@ public class ChallengeMapperImpl implements Mapper<Challenge, ChallengeDTO> {
     public ChallengeDTO mapTo(Challenge challenge) {
         ChallengeDTO challengeDTO = modelMapper.map(challenge, ChallengeDTO.class);
 
-        SportDTO sportDTO = sportMapper.mapTo(challenge.getSport());
-        List<TeamDTO> teamDTOList = challenge.getTeams().stream()
-                .map(teamMapper::mapTo)
-                .collect(Collectors.toList());
+        if (challenge.getTeams() != null) {
+            List<TeamDTO> teamDTOList = challenge.getTeams().stream()
+                    .map(teamMapper::mapTo)
+                    .collect(Collectors.toList());
 
+            challengeDTO.setTeams(teamDTOList);
+        }
+
+        SportDTO sportDTO = sportMapper.mapTo(challenge.getSport());
         challengeDTO.setSport(sportDTO);
-        challengeDTO.setTeams(teamDTOList);
 
         return challengeDTO;
     }
+
     @Override
     public Challenge mapFrom(ChallengeDTO challengeDTO) {
         Challenge challenge = modelMapper.map(challengeDTO, Challenge.class);
 
-        List<Team> teamList = challengeDTO.getTeams().stream()
-                .map(teamMapper::mapFrom)
-                .collect(Collectors.toList());
+        if (challengeDTO.getTeams() != null) {
+            List<Team> teamList = challengeDTO.getTeams().stream()
+                    .map(teamMapper::mapFrom)
+                    .collect(Collectors.toList());
+
+            challenge.setTeams(teamList);
+        }
 
         Sport sport = sportMapper.mapFrom(challengeDTO.getSport());
-
         challenge.setSport(sport);
-        challenge.setTeams(teamList);
 
         return challenge;
     }
+
 
 }
