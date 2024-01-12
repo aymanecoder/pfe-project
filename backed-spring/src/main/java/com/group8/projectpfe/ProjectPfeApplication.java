@@ -1,7 +1,12 @@
 package com.group8.projectpfe;
 
+import com.group8.projectpfe.domain.dto.SportifDTO;
 import com.group8.projectpfe.entities.Sport;
+import com.group8.projectpfe.entities.User;
 import com.group8.projectpfe.repositories.SportRepository;
+import com.group8.projectpfe.repositories.UserRepository;
+import com.group8.projectpfe.services.SportifService;
+import com.group8.projectpfe.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -13,6 +18,8 @@ import java.util.List;
 public class ProjectPfeApplication implements CommandLineRunner{
 	@Autowired
 	private SportRepository sportRepository;
+	@Autowired
+	private UserRepository userRepository;
 	public static void main(String[] args) {
 		SpringApplication.run(ProjectPfeApplication.class, args);
 	}
@@ -29,5 +36,8 @@ public class ProjectPfeApplication implements CommandLineRunner{
 
 
 		sportRepository.saveAll(sports);
+
+
+
 	}
 }
