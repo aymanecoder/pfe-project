@@ -25,6 +25,13 @@ public class Challenge{
 
 
     private String  logoPath;
+
+    private String title;
+
+    private String description;
+
+    private int nbrTeams;
+
     @Temporal(TemporalType.TIMESTAMP)
     private Date creationDate;
 

@@ -17,5 +17,12 @@ public class ChallengeDTO {
     private SportDTO sport;
 
     private String  logoPath;
+
+    private String title;
+
+    private String description;
+
+    private int nbrTeams;
+
     private Date creationDate;
 }
