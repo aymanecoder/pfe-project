@@ -10,6 +10,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 @Data
 @NoArgsConstructor
@@ -23,26 +24,7 @@ public class ChallengeDTO {
     private String title;
     private String description;
     private int nbrTeams;
-    private Date creationDate;
+    private String creationDate;
 
-    // Additional constructor
-    public ChallengeDTO(int id, List<TeamDTO> teams, SportDTO sport, String logoPath,
-                        String title, String description, int nbrTeams, String creationDate) {
-        this.id = id;
-        this.teams = teams;
-        this.sport = sport;
-        this.logoPath = logoPath;
-        this.title = title;
-        this.description = description;
-        this.nbrTeams = nbrTeams;
 
-        // Parse the string date to a Date object
-        try {
-            SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm");
-            this.creationDate = dateFormat.parse(creationDate);
-        } catch (ParseException e) {
-            e.printStackTrace();
-            // Handle the exception according to your needs
-        }
-    }
 }

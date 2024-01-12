@@ -33,6 +33,6 @@ public class Challenge{
     private int nbrTeams;
 
     @Temporal(TemporalType.TIMESTAMP)
-    private Date creationDate;
+    private String creationDate;
 
 }
