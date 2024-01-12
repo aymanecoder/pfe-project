@@ -33,7 +33,3 @@ aws:
   region: us-east-1
   s3:
     bucket: s3-bucket-mini-pfe
-#logging:
-#  level:
-#    org:
-#      springframework: DEBUG
