@@ -7,6 +7,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -21,6 +22,7 @@ public class Sport {
     private Integer id;
     private String name;
     private String description;
+    @Column(length = 500)
     private String  logoPath;
     @OneToMany(mappedBy = "sport", cascade = CascadeType.ALL)
     private List<Team> teams;
@@ -31,4 +33,10 @@ public class Sport {
     @OneToMany(mappedBy = "sport", cascade = CascadeType.ALL)
     private List<Challenge> challenges;
 
+
+    public Sport(String football, String descriptionOfFootball, String image) {
+        this.name = football;
+        this.description = descriptionOfFootball;
+        this.logoPath = image;
+    }
 }
