@@ -9,4 +9,6 @@ import java.util.Optional;
 @Repository
 public interface SportRepository extends JpaRepository<Sport,Integer> {
     Optional<Sport> findByName(String name);
+    boolean existsByName(String name);
+
 }

@@ -49,6 +49,9 @@ public class User implements UserDetails {
     @ManyToOne
     @JoinColumn(name = "group_id")
     private Group group;
+
+
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority(role.name()));

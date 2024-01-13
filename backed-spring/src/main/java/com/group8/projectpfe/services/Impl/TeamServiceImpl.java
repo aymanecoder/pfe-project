@@ -126,6 +126,19 @@ public class TeamServiceImpl implements TeamService {
         List<Team> teamsByDescription = teamRepository.findByDescription(description);
         return teamsByDescription.stream().map(teamMapper::mapTo).collect(Collectors.toList());
     }
+    @Override
+    public List<TeamDTO> searchByDescriptionForTest(String description) {
+        List<Team> teams = teamRepository.findByDescription(description);
+        List<TeamDTO> teamDTOs = new ArrayList<>();
+
+        for (Team team : teams) {
+            TeamDTO teamDTO = new TeamDTO();
+            teamDTO.setName(team.getName());
+            teamDTOs.add(teamDTO);
+        }
+
+        return teamDTOs;
+    }
 
 
 }
