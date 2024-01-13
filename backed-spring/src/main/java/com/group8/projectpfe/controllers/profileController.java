@@ -51,7 +51,6 @@ public class profileController {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(ResourceNotFound::new);
 
-        // Map the user details to a response object
         UserProfileResponse response = new UserProfileResponse();
         response.setFirstName(user.getFirstName());
         response.setLastName(user.getLastName());
