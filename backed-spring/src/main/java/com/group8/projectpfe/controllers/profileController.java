@@ -61,7 +61,7 @@ public class profileController {
         return response;
     }
     @PutMapping("/profile")
-    public ResponseEntity<UserProfileResponse> updateUserProfile(
+    public ResponseEntity<User> updateUserProfile(
             @AuthenticationPrincipal UserDetails userDetails,
             @RequestBody UserProfileRequest userProfileRequest) {
         String email = userDetails.getUsername();
@@ -69,13 +69,8 @@ public class profileController {
         // Update the user profile
         User updatedUser = profileService.updateUserProfile(email, userProfileRequest);
 
-        // Prepare the response
-        UserProfileResponse response = new UserProfileResponse();
-        response.setFirstName(updatedUser.getFirstName());
-        response.setLastName(updatedUser.getLastName());
-        response.setEmail(updatedUser.getEmail());
 
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        return new ResponseEntity<>(updatedUser, HttpStatus.OK);
     }
 }
 
