@@ -1,6 +1,7 @@
 package com.group8.projectpfe.controllers;
 
 import com.group8.projectpfe.domain.dto.GroupDto;
+import com.group8.projectpfe.entities.Group;
 import com.group8.projectpfe.services.Impl.GroupService;
 import com.group8.projectpfe.services.UserService;
 import org.junit.Assert;
@@ -11,10 +12,13 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 
 import java.util.Arrays;
 import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @RunWith(MockitoJUnitRunner.class)
 public class GroupControllerTest {
@@ -35,10 +39,13 @@ public class GroupControllerTest {
         Mockito.when(groupService.getAllGroups()).thenReturn(groupDtos);
 
         // Perform the GET request
-        List<GroupDto> result = (List<GroupDto>) groupController.getAllGroups();
+        ResponseEntity<List<GroupDto>> responseEntity = groupController.getAllGroups();
+        HttpStatusCode statusCode = responseEntity.getStatusCode();
+        List<GroupDto> result = responseEntity.getBody();
 
         // Verify the result
-        Assert.assertEquals(groupDtos, result);
+        assertEquals(HttpStatus.OK, statusCode);
+        assertEquals(groupDtos, result);
     }
 
     @Test
