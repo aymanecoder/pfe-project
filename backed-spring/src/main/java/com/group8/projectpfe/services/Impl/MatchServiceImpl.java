@@ -50,15 +50,14 @@ public class MatchServiceImpl implements MatchService {
         return matches.stream()
                 .map(match -> {
                     MatchDto matchDto = matchMapper.mapTo(match);
-
                     if (match.getTypeMatch() == MatchType.UPCOMING) {
-                        matchDto.setDate(match.getDate()); // Set the actual date and time from your Match entity
-                        matchDto.setCounter(calculateMatchCounter(match)); // Implement a method to calculate the match counter
-                        matchDto.setScore(0); // Assuming default score for upcoming matches is 0
+                        matchDto.setDate(match.getDate());
+                        matchDto.setCounter(calculateMatchCounter(match));
+                        matchDto.setScoreTeamA(0);
+                        matchDto.setScoreTeamB(0);
                     } else {
-                        // For completed matches, set score
-                        // Assuming your MatchDto has a setScore method
-                        matchDto.setScore(match.getScore());
+                        matchDto.setScoreTeamA(match.getScoreTeamA());
+                        matchDto.setScoreTeamB(match.getScoreTeamB());
                     }
 
                     return matchDto;

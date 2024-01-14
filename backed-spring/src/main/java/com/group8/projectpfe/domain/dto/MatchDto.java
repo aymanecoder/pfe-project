@@ -18,7 +18,8 @@ public class MatchDto {
     private Integer id;
     private String title;
     private String description;
-    private int score;
+    private int scoreTeamA;
+    private int scoreTeamB;
     private boolean isPrivate;
     private List<TeamDTO> teams;
     private List<SportifDTO> participants;

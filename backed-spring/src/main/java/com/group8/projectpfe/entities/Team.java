@@ -26,9 +26,7 @@ public class Team {
     @JoinColumn(name = "team_id")
     private List<User> members;
     private String description;
-
     private String  logoPath;
-
     @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     private Sport sport;
 

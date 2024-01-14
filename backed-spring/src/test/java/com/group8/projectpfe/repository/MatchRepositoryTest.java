@@ -32,7 +32,8 @@ public class MatchRepositoryTest {
         Match matchToSave = new Match();
         matchToSave.setTitle("Test Match");
         matchToSave.setDescription("This is a test match");
-        matchToSave.setScore(0);
+        matchToSave.setScoreTeamA(0);
+        matchToSave.setScoreTeamB(0);
         matchToSave.setPrivate(false);
         matchToSave.setSport(new Sport());
         matchToSave.setTypeMatch(MatchType.COMPLETED);
