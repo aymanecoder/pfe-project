@@ -18,11 +18,9 @@ public class ProfileService {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(ResourceNotFound::new);
 
-        // Update the user information
         user.setFirstName(userProfileRequest.getFirstName());
         user.setLastName(userProfileRequest.getLastName());
         user.setEmail(userProfileRequest.getEmail());
-        // You may want to hash the password before updating it
         user.setPassword(passwordEncoder.encode(userProfileRequest.getPassword()));
 
         // Save the updated user
