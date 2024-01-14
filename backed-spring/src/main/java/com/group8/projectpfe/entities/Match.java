@@ -30,12 +30,6 @@ public class Match {
     @JoinColumn(name = "match_id")
     private List<Team> teams;
 
-
-    @OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
-    @JoinColumn(name = "match_id")
-    private List<User> participants;
-
-
     @ManyToOne
     @JoinColumn(name = "sport_id")
     private Sport sport;

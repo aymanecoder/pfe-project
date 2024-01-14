@@ -22,7 +22,6 @@ public class MatchDto {
     private int scoreTeamB;
     private boolean isPrivate;
     private List<TeamDTO> teams;
-    private List<SportifDTO> participants;
     private SportDTO sport;
     private MatchType typeMatch;
     private LocalDateTime date;
