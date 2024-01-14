@@ -46,31 +46,5 @@ public class profileController {
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + fileName + "\"")
                 .body(resource);
     }
-    @GetMapping("/profile")
-    public UserProfileResponse getUserProfile(@AuthenticationPrincipal UserDetails userDetails) {
-        String email = userDetails.getUsername();
-        User user = userRepository.findByEmail(email)
-                .orElseThrow(ResourceNotFound::new);
-
-        UserProfileResponse response = new UserProfileResponse();
-        response.setFirstName(user.getFirstName());
-        response.setLastName(user.getLastName());
-        response.setEmail(user.getEmail());
-
-
-        return response;
-    }
-    @PutMapping("/profile")
-    public ResponseEntity<User> updateUserProfile(
-            @AuthenticationPrincipal UserDetails userDetails,
-            @RequestBody UserProfileRequest userProfileRequest) {
-        String email = userDetails.getUsername();
-
-        // Update the user profile
-        User updatedUser = profileService.updateUserProfile(email, userProfileRequest);
-
-
-        return new ResponseEntity<>(updatedUser, HttpStatus.OK);
-    }
 }
 

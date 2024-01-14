@@ -181,7 +181,6 @@ public class ChallengeServiceImpl implements ChallengeService {
             // Create a match with the paired teams
             Match match = new Match();
             match.setTeams(Arrays.asList(team1, team2));
-            match.setParticipants(new ArrayList<>());
             match.setSport(challenge.getSport());
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
             match.setDate(LocalDateTime.parse(challenge.getCreationDate(), formatter));

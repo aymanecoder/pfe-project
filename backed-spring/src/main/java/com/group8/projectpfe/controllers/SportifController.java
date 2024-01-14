@@ -1,15 +1,21 @@
 package com.group8.projectpfe.controllers;
 
 import com.group8.projectpfe.domain.dto.SportifDTO;
+import com.group8.projectpfe.domain.dto.UserProfileRequest;
 import com.group8.projectpfe.entities.User;
+import com.group8.projectpfe.mappers.impl.SportifMapper;
+import com.group8.projectpfe.repositories.UserRepository;
 import com.group8.projectpfe.services.Impl.ImageService;
+import com.group8.projectpfe.services.Impl.ProfileService;
 import com.group8.projectpfe.services.SportifService;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -25,6 +31,11 @@ public class SportifController {
     private final SportifService sportifService;
 
     private final ImageService imageService;
+
+    private final ProfileService profileService;
+
+    private final UserRepository userRepository;
+    private final SportifMapper sportifMapper;
     @GetMapping("")
     public ResponseEntity<List<SportifDTO>> getSportifs(){
         List<SportifDTO> athletes = sportifService.getSportifs();
@@ -103,5 +114,33 @@ public class SportifController {
     }
 
 
+    @GetMapping("/profile")
+    public ResponseEntity<SportifDTO> getUserProfile(@AuthenticationPrincipal UserDetails userDetails) {
+        String email = userDetails.getUsername();
+        User user = userRepository.findByEmail(email).orElse(null);
+        SportifDTO sportifDTO=sportifMapper.mapTo(user);
+        if (sportifDTO != null) {
+            return new ResponseEntity<>(sportifDTO, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+    @PutMapping("/profile")
+    public ResponseEntity<SportifDTO> updateUserProfile(
+            @AuthenticationPrincipal UserDetails userDetails,
+            @RequestBody UserProfileRequest userProfileRequest) {
+        String email = userDetails.getUsername();
+
+        // Update the user profile
+        User updatedUser = profileService.updateUserProfile(email, userProfileRequest);
+
+        SportifDTO sportifDTO=sportifMapper.mapTo(updatedUser);
+        if (sportifDTO != null) {
+            return new ResponseEntity<>(sportifDTO, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+    }
 }
 
