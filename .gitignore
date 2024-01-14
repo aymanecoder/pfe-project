@@ -1,6 +1,6 @@
 
 /target
 ./backed-spring/target
-./videos
-./src
+/videos
+/src
 

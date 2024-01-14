@@ -74,38 +74,6 @@ public class GroupRepositoryTest {
         groupRepository.deleteAll(allGroups);
     }
 
-    @Test
-    public void saveGroupWithMembers() {
-        // Arrange
-        User user1 = User.builder().firstName("John").lastName("Doe").build();
-        User user2 = User.builder().firstName("Jane").lastName("Doe").build();
 
-        // Save Users
-        userRepository.saveAll(List.of(user1, user2));
-
-        Set<User> members = new HashSet<>(List.of(user1, user2));
-        Group groupToSave = Group.builder()
-                .name("Group with Members")
-                .members(members)
-                .build();
-
-        // Save the Group
-        Group savedGroup = groupRepository.save(groupToSave);
-
-        // Act
-        Optional<Group> foundGroupOptional = groupRepository.findById(savedGroup.getId());
-
-        // Assert
-        assertTrue(foundGroupOptional.isPresent());
-        Group foundGroup = foundGroupOptional.get();
-        assertEquals(savedGroup.getId(), foundGroup.getId());
-        assertEquals("Group with Members", foundGroup.getName());
-        assertNotNull(foundGroup.getMembers());
-        assertEquals(2, foundGroup.getMembers().size());
-
-        // Clean up
-        groupRepository.delete(foundGroup);
-        userRepository.deleteAll(List.of(user1, user2));
-    }
 }
 

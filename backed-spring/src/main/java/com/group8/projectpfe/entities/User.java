@@ -47,7 +47,7 @@ public class User implements UserDetails {
     @JoinColumn(name = "match_id")
     private Match match;
     @ManyToOne
-    @JoinColumn(name = "group_id")
+    @JoinColumn(name = "group_id", foreignKey = @ForeignKey(name = "fk_user_group")) // Specify the same foreign key name
     private Group group;
 
 

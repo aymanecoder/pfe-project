@@ -22,18 +22,13 @@ public class Match {
 
     private String title;
     private String description;
-    private int score;
+    private int scoreTeamA;
+    private int scoreTeamB;
     private boolean isPrivate;
 
     @OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinColumn(name = "match_id")
     private List<Team> teams;
-
-
-    @OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
-    @JoinColumn(name = "match_id")
-    private List<User> participants;
-
 
     @ManyToOne
     @JoinColumn(name = "sport_id")
@@ -42,6 +37,8 @@ public class Match {
     @Enumerated(EnumType.STRING)
     private MatchType typeMatch;
     private LocalDateTime date;
+
+
 }
 
 
