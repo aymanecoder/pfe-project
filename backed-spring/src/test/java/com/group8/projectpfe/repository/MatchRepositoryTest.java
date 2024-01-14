@@ -44,7 +44,7 @@ public class MatchRepositoryTest {
         User user1 = new User();
         team1.setMembers(Collections.singletonList(user1));
         matchToSave.setTeams(Collections.singletonList(team1));
-        matchToSave.setParticipants(Collections.singletonList(user1));
+//        matchToSave.setParticipants(Collections.singletonList(user1));
 
         // Save the Match
         Match savedMatch = matchRepository.save(matchToSave);

@@ -22,6 +22,9 @@ public class Group {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
-    @OneToMany(mappedBy = "group")
-    private Set<User> members = new HashSet<>();
+
+    @OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @JoinColumn(name = "group_id", foreignKey = @ForeignKey(name = "fk_user_group")) // Specify a different name for the foreign key
+    private List<User> members;
+
 }

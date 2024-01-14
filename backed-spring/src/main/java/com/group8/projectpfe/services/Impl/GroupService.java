@@ -1,58 +1,82 @@
 package com.group8.projectpfe.services.Impl;
 
+
+import com.group8.projectpfe.domain.dto.GroupDto;
 import com.group8.projectpfe.entities.Group;
 import com.group8.projectpfe.entities.User;
+import com.group8.projectpfe.mappers.impl.GroupMapper;
 import com.group8.projectpfe.repositories.GroupRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.group8.projectpfe.repositories.UserRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
-// GroupService.java
 @Service
 public class GroupService {
-    @Autowired
-    private GroupRepository groupRepository;
 
-    public List<Group> getAllGroups() {
-        return groupRepository.findAll();
+    private final GroupRepository groupRepository;
+    private final GroupMapper groupMapper;
+    private final UserRepository userRepository;
+
+    public GroupService(GroupRepository groupRepository, GroupMapper groupMapper, UserRepository userRepository) {
+        this.groupRepository = groupRepository;
+        this.groupMapper = groupMapper;
+        this.userRepository = userRepository;
     }
 
-    public Group getGroupById(Long groupId) {
-        return groupRepository.findById(groupId).orElse(null);
+        @Transactional
+        public GroupDto createGroup(GroupDto groupDto) {
+            Group groupToCreate = groupMapper.mapFrom(groupDto);
+
+            List<User> managedMembers = new ArrayList<>();
+            for (User member : groupToCreate.getMembers()) {
+                User managedMember = userRepository.getById(member.getId());
+                managedMembers.add(managedMember);
+            }
+
+            groupToCreate.setMembers(managedMembers);
+
+            // Save the group
+            Group createdGroup = groupRepository.save(groupToCreate);
+
+            return groupMapper.mapTo(createdGroup);
+        }
+
+    @Transactional(readOnly = true)
+    public List<GroupDto> getAllGroups() {
+        List<Group> groups = groupRepository.findAll();
+        return groups.stream()
+                .map(groupMapper::mapTo)
+                .collect(Collectors.toList());
     }
 
-    public Group createGroup(Group group) {
-        // Additional validation or business logic can be added here
-        return groupRepository.save(group);
+    @Transactional(readOnly = true)
+    public GroupDto getGroupById(Long groupId) {
+        Optional<Group> groupOptional = groupRepository.findById(groupId);
+        return groupOptional.map(groupMapper::mapTo).orElse(null);
     }
 
-    public Group updateGroup(Long groupId, Group updatedGroup) {
-        Group existingGroup = groupRepository.findById(groupId).orElse(null);
+    @Transactional
+    public GroupDto updateGroup(Long groupId, GroupDto updatedGroupDto) {
+        Optional<Group> existingGroupOptional = groupRepository.findById(groupId);
 
-        if (existingGroup != null) {
-            // Update properties as needed
-            existingGroup.setName(updatedGroup.getName());
-            existingGroup.setMembers(updatedGroup.getMembers());
-
-            return groupRepository.save(existingGroup);
+        if (existingGroupOptional.isPresent()) {
+            Group existingGroup = existingGroupOptional.get();
+            groupMapper.mapToEntity(updatedGroupDto, existingGroup);
+            Group updatedGroup = groupRepository.save(existingGroup);
+            return groupMapper.mapTo(updatedGroup);
         } else {
-            return null; // Group not found
+            // Handle the case where the group with the given ID is not found
+            return null;
         }
     }
 
+    @Transactional
     public void deleteGroup(Long groupId) {
         groupRepository.deleteById(groupId);
-    }
-    public Group addUserToGroup(Long groupId, User user) {
-        Group group = groupRepository.findById(groupId).orElse(null);
-
-        if (group != null) {
-            group.getMembers().add(user);
-            groupRepository.save(group);
-            return group;
-        } else {
-            return null; // Group not found
-        }
     }
 }
