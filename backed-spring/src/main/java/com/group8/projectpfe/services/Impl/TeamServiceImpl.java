@@ -17,6 +17,9 @@ import com.group8.projectpfe.services.TeamService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -36,6 +39,8 @@ public class TeamServiceImpl implements TeamService {
 
     private final ModelMapper modelMapper;
 
+
+
     @Override
     public List<TeamDTO> getAllTeams() {
         List<Team> teams = teamRepository.findAll();
@@ -53,8 +58,12 @@ public class TeamServiceImpl implements TeamService {
         // Assuming EntityManager is available or injected
         Team teamToCreate = teamMapper.mapFrom(teamDetails);
 
+        // Retrieve the ID of the currently authenticated user
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Integer authenticatedUserId = ((User) authentication.getPrincipal()).getId();
+
         // Retrieve managed admin user
-        User managedAdmin = userRepository.getById(teamToCreate.getAdmin().getId());
+        User managedAdmin = userRepository.getById(authenticatedUserId);
 
         // Retrieve and manage members
         List<User> managedMembers = new ArrayList<>();
@@ -116,6 +125,19 @@ public class TeamServiceImpl implements TeamService {
     public List<TeamDTO> searchByDescription(String description) {
         List<Team> teamsByDescription = teamRepository.findByDescription(description);
         return teamsByDescription.stream().map(teamMapper::mapTo).collect(Collectors.toList());
+    }
+    @Override
+    public List<TeamDTO> searchByDescriptionForTest(String description) {
+        List<Team> teams = teamRepository.findByDescription(description);
+        List<TeamDTO> teamDTOs = new ArrayList<>();
+
+        for (Team team : teams) {
+            TeamDTO teamDTO = new TeamDTO();
+            teamDTO.setName(team.getName());
+            teamDTOs.add(teamDTO);
+        }
+
+        return teamDTOs;
     }
 
 

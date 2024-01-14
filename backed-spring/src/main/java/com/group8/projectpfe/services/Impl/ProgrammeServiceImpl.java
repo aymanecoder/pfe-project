@@ -98,6 +98,20 @@ public class ProgrammeServiceImpl implements ProgrammeService {
 
         return programmeDTOs;
     }
+
+    @Override
+    public List<ProgrammeDTO> getProgramsByTypeProgram(String typeProgram) {
+
+        TypeProgram typeProgramEnum = TypeProgram.valueOf(typeProgram);
+
+        List<Programme> programmesByTypeProgram = programmeRepository.findByTypeProgramme(typeProgramEnum);
+
+        return programmesByTypeProgram.stream()
+                .map(programmeMapper::mapTo)
+                .collect(Collectors.toList());
+    }
+
+
 }
 
 

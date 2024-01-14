@@ -3,6 +3,7 @@ package com.group8.projectpfe.entities;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -24,4 +25,7 @@ public class Challenge{
 
 
     private String  logoPath;
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date creationDate;
+
 }

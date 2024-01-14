@@ -1,5 +1,7 @@
 package com.group8.projectpfe.services.Impl;
 
+import com.group8.projectpfe.entities.Group;
+import com.group8.projectpfe.entities.User;
 import com.group8.projectpfe.repositories.UserRepository;
 import com.group8.projectpfe.services.UserService;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +20,17 @@ public class UserServiceImpl implements UserService {
     public UserDetailsService userDetailsService(){
         return username -> userRepository.findByEmail(username)
                 .orElseThrow(()->new UsernameNotFoundException("User not Found"));
+    }
+    @Override
+    public User joinGroup(int userId, Group group) {
+        User user = userRepository.findById(userId).orElse(null);
+
+        if (user != null) {
+            user.setGroup(group);
+            return userRepository.save(user);
+        } else {
+            return null; // User not found
+        }
     }
 
 }

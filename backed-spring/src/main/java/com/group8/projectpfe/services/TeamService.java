@@ -16,6 +16,8 @@ public interface TeamService {
     void deleteTeam(int id);
 
     List<TeamDTO> searchByDescription(String description);
+    public List<TeamDTO> searchByDescriptionForTest(String description);
+
 
 
 }
