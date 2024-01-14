@@ -4,6 +4,7 @@ import com.group8.projectpfe.domain.dto.ChallengeDTO;
 import com.group8.projectpfe.domain.dto.TeamDTO;
 import com.group8.projectpfe.entities.User;
 import com.group8.projectpfe.exception.ResourceNotFound;
+import com.group8.projectpfe.repositories.UserRepository;
 import com.group8.projectpfe.services.ChallengeService;
 import com.group8.projectpfe.services.Impl.ImageService;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +17,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1/challenges")
@@ -28,6 +31,8 @@ public class ChallengeController {
 
     private final ImageService imageService;
 
+    private final UserRepository userRepository;
+
 
     @GetMapping
     public ResponseEntity<List<ChallengeDTO>> getAllChallenges() {
@@ -36,17 +41,29 @@ public class ChallengeController {
     }
 
     @GetMapping("/joinChallenge/{challengeId}")
-    public ResponseEntity<String> joinChallenge(
+    public ResponseEntity<Map<String, String>> joinChallenge(
             @PathVariable int challengeId,
             @AuthenticationPrincipal UserDetails userDetails) {
-        String email = userDetails.getUsername();
-        User user = userRepository.findByEmail(email)
-                .orElseThrow(ResourceNotFound::new);
-        // Implement your logic here
-        String result = challengeService.joinChallenge(challengeId, user);
+        Map<String, String> response = new HashMap<>();
 
-        return ResponseEntity.ok(result);
+        try {
+            String email = userDetails.getUsername();
+            User user = userRepository.findByEmail(email)
+                    .orElseThrow(ResourceNotFound::new);
+
+            // Implement your logic here
+            String result = challengeService.joinChallenge(challengeId, user);
+
+            response.put("status", "success");
+            response.put("message", result);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            response.put("status", "error");
+            response.put("message", e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+        }
     }
+
 
     @GetMapping("/{id}")
     public ResponseEntity<ChallengeDTO> getChallengeById(@PathVariable int id) {
@@ -77,6 +94,7 @@ public class ChallengeController {
     public ResponseEntity<ChallengeDTO> updateChallenge(@PathVariable int id,@RequestParam("logo") MultipartFile logo, @ModelAttribute ChallengeDTO updatedChallengeDetails) {
         if (!logo.isEmpty()) {
             try {
+
                 String imagePath = imageService.saveImage(logo); // Save the image and get the generated file path
                 if (updatedChallengeDetails.getLogoPath() != null) {
                     imageService.deleteProfile(updatedChallengeDetails.getLogoPath()); // Delete the old profile picture

@@ -3,12 +3,13 @@ package com.group8.projectpfe.services.Impl;
 import com.group8.projectpfe.domain.dto.ChallengeDTO;
 import com.group8.projectpfe.domain.dto.SportifDTO;
 import com.group8.projectpfe.domain.dto.TeamDTO;
-import com.group8.projectpfe.entities.Challenge;
-import com.group8.projectpfe.entities.Sport;
-import com.group8.projectpfe.entities.Team;
-import com.group8.projectpfe.entities.User;
+import com.group8.projectpfe.entities.*;
 import com.group8.projectpfe.mappers.impl.ChallengeMapperImpl;
+import com.group8.projectpfe.mappers.impl.SportMapperImpl;
+import com.group8.projectpfe.mappers.impl.SportifMapper;
+import com.group8.projectpfe.mappers.impl.TeamMapperImpl;
 import com.group8.projectpfe.repositories.ChallengeRepository;
+import com.group8.projectpfe.repositories.MatchRepository;
 import com.group8.projectpfe.repositories.SportRepository;
 import com.group8.projectpfe.repositories.TeamRepository;
 import com.group8.projectpfe.services.ChallengeService;
@@ -16,10 +17,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
 import java.util.stream.Collectors;
+
+import static com.group8.projectpfe.entities.MatchType.UPCOMING;
 
 @Service
 @RequiredArgsConstructor
@@ -29,7 +32,10 @@ public class ChallengeServiceImpl implements ChallengeService {
     private final ChallengeRepository challengeRepository;
 
     private final TeamRepository teamRepository;
+    private final MatchRepository matchRepository;
     private final SportRepository sportRepository;
+    private final SportMapperImpl sportMapperImpl;
+    private final TeamMapperImpl teamMapperImpl;
     private final ChallengeMapperImpl challengeMapper;
 
     @Override
@@ -73,16 +79,28 @@ public class ChallengeServiceImpl implements ChallengeService {
 
         if (optionalChallenge.isPresent()) {
             Challenge existingChallenge = optionalChallenge.get();
-
-            Sport sport = sportRepository.getReferenceById(updatedChallengeDetails.getSport().getId());
-            existingChallenge.setSport(sport);
+        //updatedChallengeDetails.setSport(sportMapperImpl.mapTo(existingChallenge.getSport()));
+//           if(updatedChallengeDetails.getTeams()==null) {
+//               updatedChallengeDetails.setTeams(existingChallenge.getTeams().stream().map(teamMapperImpl::mapTo).collect(Collectors.toList()));
+//           }
+            if(updatedChallengeDetails.getSport()!=null) {
+                Sport sport = sportRepository.getReferenceById(updatedChallengeDetails.getSport().getId());
+                existingChallenge.setSport(sport);
+            }
             // Assuming you're getting the members as a list of User IDs in the DTO
-            List<Integer> teamTds = updatedChallengeDetails.getTeams().stream()
-                    .map(TeamDTO::getId) // Assuming getId() returns the user ID as an Integer
-                    .collect(Collectors.toList());
-            List<Team> teams = teamRepository.findAllById(teamTds);
-            existingChallenge.setTeams(teams);
+            if(updatedChallengeDetails.getTeams()!=null) {
+                List<Integer> teamTds = updatedChallengeDetails.getTeams().stream()
+                        .map(TeamDTO::getId) // Assuming getId() returns the user ID as an Integer
+                        .collect(Collectors.toList());
+                List<Team> teams = teamRepository.findAllById(teamTds);
+                existingChallenge.setTeams(teams);
+            }
+
             existingChallenge.setLogoPath(updatedChallengeDetails.getLogoPath());
+            existingChallenge.setTitle(updatedChallengeDetails.getTitle());
+            existingChallenge.setNbrTeams(updatedChallengeDetails.getNbrTeams());
+            existingChallenge.setDescription(updatedChallengeDetails.getDescription());
+            existingChallenge.setCreationDate(updatedChallengeDetails.getCreationDate());
             Challenge updatedChallenge = challengeRepository.save(existingChallenge);
             return challengeMapper.mapTo(updatedChallenge);
         } else {
@@ -99,27 +117,41 @@ public class ChallengeServiceImpl implements ChallengeService {
         }
 
         // Check if the challenge is already full
-        int numberOfTeams = challenge.getTeams().size();
-        int maxTeams = challenge.getTeams();
-        if (numberOfTeams >= maxTeams) {
+        int numberOfTeams = challenge.getNbrTeams();
+        List<Team> teams = challenge.getTeams();
+
+        if (numberOfTeams == teams.size()) {
             return "Challenge is already full";
         }
 
         // Check if the user is already in a team for this challenge
         Team userTeam = user.getTeam();
-        if (userTeam != null && challenge.getTeams().contains(userTeam)) {
-            return "User is already in a team for this challenge";
+        if (userTeam == null) {
+            return "User doesn't have team";
+        }
+
+        if (challenge.getTeams() == null) {
+            challenge.setTeams(new ArrayList<>());
+        }
+
+
+        if (userTeam != null  && challenge.getTeams().contains(userTeam)) {
+            return "the team is already in the challenge";
         }
 
         // Check if the user is an admin in their team
-        if (userTeam != null && !userTeam.getAdmin().equals(user)) {
+        if (userTeam != null && userTeam.getAdmin() != null && !userTeam.getAdmin().equals(user)) {
             return "User is not an admin in their team";
         }
 
         // If all checks pass, add the user to the challenge
         challenge.getTeams().add(userTeam);
+
         challengeRepository.save(challenge);
 
+        if (challenge.getTeams().size() == challenge.getNbrTeams()) {
+            createMatchesForChallenge(challenge);
+        }
         // Additional logic, such as creating matches, can be added here
 
         return "User joined the challenge successfully";
@@ -131,6 +163,39 @@ public class ChallengeServiceImpl implements ChallengeService {
     }
 
 
+    private void createMatchesForChallenge(Challenge challenge) {
+        List<Team> teams = challenge.getTeams();
+
+        // Shuffle the list of teams to randomize the match pairings
+        Collections.shuffle(teams);
+
+        // Create matches by pairing up teams
+        int matchesToCreate = teams.size() / 2;
+
+        // Create matches by pairing up teams
+        List<Match> matches = new ArrayList<>();
+        for (int i = 0; i < matchesToCreate; i++) {
+            Team team1 = teams.get(i * 2);
+            Team team2 = teams.get(i * 2 + 1);
+
+            // Create a match with the paired teams
+            Match match = new Match();
+            match.setTeams(Arrays.asList(team1, team2));
+            match.setParticipants(new ArrayList<>());
+            match.setSport(challenge.getSport());
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+            match.setDate(LocalDateTime.parse(challenge.getCreationDate(), formatter));
+
+            match.setTypeMatch(UPCOMING);
+            match.setPrivate(false);
+            match.setDescription(challenge.getDescription());
+            match.setTitle(challenge.getTitle());
+            // Add the match to the list
+            matches.add(match);
+        }
+
+        matchRepository.saveAll(matches);
+    }
 
 
 }

@@ -86,7 +86,7 @@ public class CoachController {
                         if (existingCoach.getPicturePath() != null) {
                             imageService.deleteProfile(existingCoach.getPicturePath()); // Delete the old profile picture
                         }
-                        existingCoach.setPicturePath(imagePath); // Set the image path in the DTO instead of the byte array
+                        coachDTO.setPicturePath(imagePath); // Set the image path in the DTO instead of the byte array
                     } catch (IOException e) {
                         // Handle file processing error
                         return new ResponseEntity<>("Failed to process the image", HttpStatus.INTERNAL_SERVER_ERROR);
