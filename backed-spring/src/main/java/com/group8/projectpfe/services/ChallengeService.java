@@ -1,6 +1,8 @@
 package com.group8.projectpfe.services;
 
 import com.group8.projectpfe.domain.dto.ChallengeDTO;
+import com.group8.projectpfe.entities.User;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -13,9 +15,8 @@ public interface ChallengeService {
 
     ChallengeDTO updateChallenge(int id, ChallengeDTO updatedChallengeDetails);
 
+    String joinChallenge(int challengeId, User user);
     void deleteChallenge(int id);
-
-
 
 
 }

@@ -89,6 +89,41 @@ public class ChallengeServiceImpl implements ChallengeService {
     }
 
     @Override
+    public String joinChallenge(int challengeId, User user) {
+        // Check if the challenge exists
+        Challenge challenge = challengeRepository.findById(challengeId).orElse(null);
+        if (challenge == null) {
+            return "Challenge not found";
+        }
+
+        // Check if the challenge is already full
+        int numberOfTeams = challenge.getTeams().size();
+        int maxTeams = challenge.getTeams();
+        if (numberOfTeams >= maxTeams) {
+            return "Challenge is already full";
+        }
+
+        // Check if the user is already in a team for this challenge
+        Team userTeam = user.getTeam();
+        if (userTeam != null && challenge.getTeams().contains(userTeam)) {
+            return "User is already in a team for this challenge";
+        }
+
+        // Check if the user is an admin in their team
+        if (userTeam != null && !userTeam.getAdmin().equals(user)) {
+            return "User is not an admin in their team";
+        }
+
+        // If all checks pass, add the user to the challenge
+        challenge.getTeams().add(userTeam);
+        challengeRepository.save(challenge);
+
+        // Additional logic, such as creating matches, can be added here
+
+        return "User joined the challenge successfully";
+    }
+
+    @Override
     public void deleteChallenge(int id) {
         challengeRepository.deleteById(id);
     }

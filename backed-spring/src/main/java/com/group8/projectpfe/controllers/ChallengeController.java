@@ -2,12 +2,16 @@ package com.group8.projectpfe.controllers;
 
 import com.group8.projectpfe.domain.dto.ChallengeDTO;
 import com.group8.projectpfe.domain.dto.TeamDTO;
+import com.group8.projectpfe.entities.User;
+import com.group8.projectpfe.exception.ResourceNotFound;
 import com.group8.projectpfe.services.ChallengeService;
 import com.group8.projectpfe.services.Impl.ImageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -29,6 +33,19 @@ public class ChallengeController {
     public ResponseEntity<List<ChallengeDTO>> getAllChallenges() {
         List<ChallengeDTO> challenges = challengeService.getAllChallenges();
         return new ResponseEntity<>(challenges, HttpStatus.OK);
+    }
+
+    @GetMapping("/joinChallenge/{challengeId}")
+    public ResponseEntity<String> joinChallenge(
+            @PathVariable int challengeId,
+            @AuthenticationPrincipal UserDetails userDetails) {
+        String email = userDetails.getUsername();
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(ResourceNotFound::new);
+        // Implement your logic here
+        String result = challengeService.joinChallenge(challengeId, user);
+
+        return ResponseEntity.ok(result);
     }
 
     @GetMapping("/{id}")
@@ -89,4 +106,5 @@ public class ChallengeController {
         }
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+
 }

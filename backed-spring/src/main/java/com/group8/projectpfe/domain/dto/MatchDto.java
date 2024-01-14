@@ -28,6 +28,5 @@ public class MatchDto {
     private int counter;
 
 
-
 }
 
