@@ -54,9 +54,11 @@ public class ChallengeServiceImpl implements ChallengeService {
             challengeToCreate.setSport(existingSport);
         }
         List<Team> teams = new ArrayList<>();
-        for (Team member : challengeToCreate.getTeams()) {
-            Team team = teamRepository.getById(member.getId());
-            teams.add(team);
+        if (challengeToCreate.getTeams() != null) {
+            for (Team member : challengeToCreate.getTeams()) {
+                Team team = teamRepository.getById(member.getId());
+                teams.add(team);
+            }
         }
 
         challengeToCreate.setTeams(teams);
