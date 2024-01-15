@@ -15,11 +15,11 @@ class FirebaseNotificationConfig{
     @Bean
     FirebaseMessaging firebaseMessaging() throws IOException {
         GoogleCredentials googleCredentials = GoogleCredentials
-                .fromStream(new ClassPathResource("spring-app-35f65-firebase-adminsdk-rqn35-4c88445035.json").getInputStream());
+                .fromStream(new ClassPathResource("spring-app-35f65-firebase-adminsdk-rqn35-e3df612af4.json").getInputStream());
         FirebaseOptions firebaseOptions = FirebaseOptions.builder()
                 .setCredentials(googleCredentials)
                 .build();
-        FirebaseApp app = FirebaseApp.initializeApp(firebaseOptions,"my-app");
+        FirebaseApp app = FirebaseApp.initializeApp(firebaseOptions,"spring-app");
         return FirebaseMessaging.getInstance(app);
     }
 }
