@@ -1,14 +1,12 @@
 package com.group8.projectpfe.controllers;
 
 import com.group8.projectpfe.domain.dto.ChallengeDTO;
-import com.group8.projectpfe.domain.dto.TeamDTO;
 import com.group8.projectpfe.entities.User;
 import com.group8.projectpfe.exception.ResourceNotFound;
 import com.group8.projectpfe.repositories.UserRepository;
 import com.group8.projectpfe.services.ChallengeService;
 import com.group8.projectpfe.services.Impl.ImageService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;

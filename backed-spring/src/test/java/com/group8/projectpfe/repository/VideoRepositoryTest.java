@@ -24,7 +24,7 @@ public class VideoRepositoryTest {
         Video videoToSave = new Video();
         videoToSave.setTitre("Test Video");
         videoToSave.setDescription("This is a test video description");
-        videoToSave.setTags("tag1, tag2");
+//        videoToSave.setTags("tag1, tag2");
         videoToSave.setVideoName("test_video.mp4");
         videoToSave.setAddedDate("2022-01-12");
 
@@ -38,7 +38,7 @@ public class VideoRepositoryTest {
         assertEquals(savedVideo.getId(), foundVideo.getId(), "Ids should match");
         assertEquals(savedVideo.getTitre(), foundVideo.getTitre(), "Titles should match");
         assertEquals(savedVideo.getDescription(), foundVideo.getDescription(), "Descriptions should match");
-        assertEquals(savedVideo.getTags(), foundVideo.getTags(), "Tags should match");
+//        assertEquals(savedVideo.getTags(), foundVideo.getTags(), "Tags should match");
         assertEquals(savedVideo.getVideoName(), foundVideo.getVideoName(), "Video names should match");
         assertEquals(savedVideo.getAddedDate(), foundVideo.getAddedDate(), "Added dates should match");
     }

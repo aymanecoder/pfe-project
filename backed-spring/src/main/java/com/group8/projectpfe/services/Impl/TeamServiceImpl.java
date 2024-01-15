@@ -139,6 +139,8 @@ public class TeamServiceImpl implements TeamService {
 
         return teamDTOs;
     }
-
+        public void joinTeam(){
+            
+        }
 
 }

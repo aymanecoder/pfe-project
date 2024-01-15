@@ -1,6 +1,7 @@
 package com.group8.projectpfe.controllers;
 
 import com.group8.projectpfe.domain.dto.ChallengeDTO;
+import com.group8.projectpfe.repositories.UserRepository;
 import com.group8.projectpfe.services.ChallengeService;
 import com.group8.projectpfe.services.Impl.ImageService;
 import org.junit.jupiter.api.BeforeEach;
@@ -31,11 +32,13 @@ class ChallengeControllerTest {
 
     @Mock
     private ImageService imageService;
+    @Mock
+    private UserRepository userRepository;
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-        challengeController = new ChallengeController(challengeService, imageService);
+        challengeController = new ChallengeController(challengeService, imageService,userRepository);
     }
 
     @Test

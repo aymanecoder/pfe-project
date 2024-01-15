@@ -37,6 +37,8 @@ public class Match {
     @Enumerated(EnumType.STRING)
     private MatchType typeMatch;
     private LocalDateTime date;
+    private String localisation;
+
 
 
 }

@@ -29,7 +29,7 @@ public class ChallengeRepositoryTest {
         Challenge challengeToSave = new Challenge();
         challengeToSave.setLogoPath("path/to/logo");
         Date expectedCreationDate = new Date();
-        challengeToSave.setCreationDate(expectedCreationDate);
+        challengeToSave.setCreationDate("2023-01-12");
 
         // Create and set Teams and Sport
         Team team1 = new Team();
@@ -51,7 +51,7 @@ public class ChallengeRepositoryTest {
         assertEquals("path/to/logo", foundChallenge.getLogoPath());
 
         // Compare creation dates using milliseconds since epoch
-        assertEquals(expectedCreationDate.getTime(), foundChallenge.getCreationDate().getTime());
+        assertEquals(expectedCreationDate.getTime(), foundChallenge.getCreationDate());
 
         // Additional assertions based on your entity structure
     }

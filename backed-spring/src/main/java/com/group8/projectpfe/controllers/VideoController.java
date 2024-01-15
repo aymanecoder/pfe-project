@@ -17,14 +17,16 @@ import org.springframework.util.StreamUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.AccessDeniedException;
 import java.util.List;
 import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("api/v1")
+@RequestMapping("api/v1/video")
 public class VideoController {
     private final VideoService videoService;
     private final FileService fileService;
@@ -75,11 +77,32 @@ public class VideoController {
     }
     @GetMapping(value = "/play/{id}", produces = MediaType.ALL_VALUE)
     public void playVideo(@PathVariable Integer id, HttpServletResponse response) throws IOException {
-       Optional<Video> video = videoRepository.findById(id);
-       InputStream resource = fileService.getVideoFile(path,video.get().getVideoName(),id);
-       response.setContentType(MediaType.ALL_VALUE);
-        StreamUtils.copy(resource,response.getOutputStream());
+        Optional<Video> video = videoRepository.findById(id);
 
+        if (video.isPresent()) {
+            String videoName = video.get().getVideoName();
+            try {
+                InputStream resource = fileService.getVideoFile(path, videoName, id);
+                response.setContentType(MediaType.ALL_VALUE);
+                StreamUtils.copy(resource, response.getOutputStream());
+            } catch (FileNotFoundException e) {
+                // Handle file not found error
+                response.setStatus(HttpStatus.NOT_FOUND.value());
+                response.getWriter().write("Video file not found.");
+            } catch (AccessDeniedException e) {
+                // Handle access denied error
+                response.setStatus(HttpStatus.FORBIDDEN.value());
+                response.getWriter().write("Access to video file is denied.");
+            } catch (IOException e) {
+                // Handle other IO errors
+                response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
+                response.getWriter().write("Error occurred while streaming video.");
+            }
+        } else {
+            // Handle video not found error
+            response.setStatus(HttpStatus.NOT_FOUND.value());
+            response.getWriter().write("Video not found.");
+        }
     }
     @PostMapping("/videos")
     public ResponseEntity<VideoDto> createVideo(@RequestParam("video") MultipartFile video,

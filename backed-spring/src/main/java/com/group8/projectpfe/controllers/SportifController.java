@@ -133,7 +133,7 @@ public class SportifController {
             @AuthenticationPrincipal UserDetails userDetails,
             @ModelAttribute UserProfileRequest userProfileRequest) {
         String email = userDetails.getUsername();
-file
+
         User user = userRepository.findByEmail(email).orElse(null);
         if(user==null){
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);

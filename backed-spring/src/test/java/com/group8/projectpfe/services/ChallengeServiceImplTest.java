@@ -80,7 +80,7 @@ public class ChallengeServiceImplTest {
         challengeDTO.setSport(new SportDTO()); // Set a non-null SportDTO object
         challengeDTO.setTeams(null); // Set null for teams
         challengeDTO.setLogoPath(null); // Set null for logoPath
-        challengeDTO.setCreationDate(new Date()); // Set null for creationDate
+        challengeDTO.setCreationDate(String.valueOf(new Date())); // Set null for creationDate
 
         Challenge challengeToCreate = new Challenge();
         challengeToCreate.setTeams(new ArrayList<>()); // Set an empty list of teams

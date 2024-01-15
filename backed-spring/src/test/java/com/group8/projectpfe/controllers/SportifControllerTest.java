@@ -69,8 +69,8 @@ public class SportifControllerTest {
         Mockito.when(sportifService.getSportifById(1L))
                 .thenReturn(sportif1);
 
-        Mockito.when(sportifService.getSportifById(2L))
-                .thenReturn(sportif2);
+//        Mockito.when(sportifService.getSportifById(2L))
+//                .thenReturn(sportif2);
     }
 
     @Test
@@ -120,7 +120,7 @@ public class SportifControllerTest {
         sportifDTO.setId(id);
         User user = new User();
         user.setId(id);
-        Mockito.when(sportifService.getSportifById(Long.valueOf(id))).thenReturn(sportifDTO);
+//        Mockito.when(sportifService.getSportifById(Long.valueOf(id))).thenReturn(sportifDTO);
 //        Mockito.when(imageService.deleteProfile(sportifDTO.getPicturePath())).thenReturn(true);
 
         // Perform the DELETE request
@@ -140,7 +140,7 @@ public class SportifControllerTest {
     public void testDeleteUser_Unauthorized() throws IOException {
         // Mock data
         Integer id = 1;
-        Mockito.doNothing().when(sportifService).deleteSportif(Mockito.anyInt(), Mockito.anyInt());
+//        Mockito.doNothing().when(sportifService).deleteSportif(Mockito.anyInt(), Mockito.anyInt());
         ResponseEntity<String> response = sportifController.deleteUser(id);
 
         // Verify the result
