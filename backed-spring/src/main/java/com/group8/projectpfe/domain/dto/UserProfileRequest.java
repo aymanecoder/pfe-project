@@ -14,4 +14,9 @@ public class UserProfileRequest {
     private String lastName;
     private String email;
     private String password;
+    private String address;
+    private Integer age;
+    private Integer taille;
+    private Integer poids;
+    private String PicturePath;
 }

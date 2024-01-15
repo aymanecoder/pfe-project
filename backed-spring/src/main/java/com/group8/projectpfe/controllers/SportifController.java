@@ -125,12 +125,31 @@ public class SportifController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
+
+
     @PutMapping("/profile")
     public ResponseEntity<SportifDTO> updateUserProfile(
+            @RequestParam("file") MultipartFile file,
             @AuthenticationPrincipal UserDetails userDetails,
-            @RequestBody UserProfileRequest userProfileRequest) {
+            @ModelAttribute UserProfileRequest userProfileRequest) {
         String email = userDetails.getUsername();
-
+file
+        User user = userRepository.findByEmail(email).orElse(null);
+        if(user==null){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        if (!file.isEmpty()) {
+            try {
+                String imagePath = imageService.saveImage(file); // Save the image and get the generated file path
+                if (user.getPicturePath() != null) {
+                    imageService.deleteProfile(user.getPicturePath()); // Delete the old profile picture
+                }
+                userProfileRequest.setPicturePath(imagePath); // Set the image path in the DTO instead of the byte array
+            } catch (IOException e) {
+                // Handle file processing error
+                return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+        }
         // Update the user profile
         User updatedUser = profileService.updateUserProfile(email, userProfileRequest);
 
