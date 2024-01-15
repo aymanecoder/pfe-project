@@ -139,8 +139,26 @@ public class TeamServiceImpl implements TeamService {
 
         return teamDTOs;
     }
-        public void joinTeam(){
-            
+    public void joinTeam(int teamId) {
+        // Retrieve the ID of the currently authenticated user
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Integer authenticatedUserId = ((User) authentication.getPrincipal()).getId();
+
+        // Retrieve the team from the database
+        Optional<Team> teamOptional = teamRepository.findById(teamId);
+        if (teamOptional.isPresent()) {
+            Team team = teamOptional.get();
+
+            User user = userRepository.getById(authenticatedUserId);
+
+            team.getMembers().add(user);
+
+            teamRepository.save(team);
+        } else {
+            // Handle scenario when the team with the given ID is not found
+            throw new IllegalArgumentException("Team not found with ID: " + teamId);
         }
+    }
+
 
 }

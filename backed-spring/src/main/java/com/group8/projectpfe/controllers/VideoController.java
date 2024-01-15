@@ -43,7 +43,7 @@ public class VideoController {
         return new ResponseEntity<>(createdVideo, HttpStatus.CREATED);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("video/{id}")
     public ResponseEntity<VideoDto> getVideoById(@PathVariable Integer id) {
         VideoDto video = videoService.getVideoById(id);
         return new ResponseEntity<>(video, HttpStatus.OK);

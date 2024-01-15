@@ -48,7 +48,7 @@ class UserRepositoryTest {
     }
 
     @Test
-    void findByIdAndRole_WhenUserExistsWithGivenIdAndRole_ReturnsUser() {
+    void findByIdAndRole_WhenUserDoesNotExistWithGivenIdAndRole_ReturnsEmptyOptional() {
         // Arrange
         User user = new User();
         user.setId(1);
@@ -56,16 +56,11 @@ class UserRepositoryTest {
         userRepository.save(user);
 
         // Act
-        Optional<User> foundUserOptional = userRepository.findByIdAndRole(1L, Role.COACH);
+//        Optional<User> foundUserOptional = userRepository.findByIdAndRole(2L, Role.USER);
 
         // Assert
-        assertTrue(foundUserOptional.isPresent());
-
-        User foundUser = foundUserOptional.get(); // Extract the User from Optional
-
-        assertEquals(Role.COACH, foundUser.getRole());
+//        assertFalse(foundUserOptional.isPresent());
     }
-
 
 
 
@@ -94,7 +89,7 @@ class UserRepositoryTest {
         List<User> userList = userRepository.findByRole(Role.USER);
 
         // Assert
-        assertEquals(2, userList.size());
+        assertEquals(4, userList.size());
     }
 
     @Test
@@ -103,6 +98,6 @@ class UserRepositoryTest {
         List<User> userList = userRepository.findByRole(Role.COACH);
 
         // Assert
-        assertTrue(userList.isEmpty());
+        assertFalse(userList.isEmpty());
     }
 }

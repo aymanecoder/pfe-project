@@ -22,6 +22,7 @@ public class EquipeController {
     private final TeamService equipeService;
 
     private final ImageService imageService;
+    private final TeamService teamService;
 
     @GetMapping
     public ResponseEntity<List<TeamDTO>> getAllTeams() {
@@ -86,6 +87,12 @@ public class EquipeController {
             return new ResponseEntity<>("Unauthorized delete or sportif not found", HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @PostMapping("/{teamId}/join")
+    public ResponseEntity<Void> joinTeam(@PathVariable("teamId") int teamId) {
+        teamService.joinTeam(teamId);
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 
 }

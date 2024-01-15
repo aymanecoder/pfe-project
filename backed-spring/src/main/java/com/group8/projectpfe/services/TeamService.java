@@ -17,6 +17,7 @@ public interface TeamService {
 
     List<TeamDTO> searchByDescription(String description);
     public List<TeamDTO> searchByDescriptionForTest(String description);
+    void joinTeam(int teamId);
 
 
 
