@@ -1,5 +1,7 @@
 server:
   port: 8080
+  tomcat:
+    max-swallow-size: 100MB
 spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/db-healthily

@@ -29,8 +29,12 @@ public class VideoController {
     private final VideoService videoService;
     private final FileService fileService;
     private final VideoRepository videoRepository;
+
     @Value("${project.video}")
     private String path;
+    @Value("${server.port}")
+    private String port;
+
     @PostMapping
     public ResponseEntity<VideoDto> createVideo(@RequestBody VideoDto videoDto) {
         VideoDto createdVideo = videoService.createVideo(videoDto);
@@ -49,7 +53,7 @@ public class VideoController {
         return new ResponseEntity<>(updatedVideo, HttpStatus.OK);
     }
 
-    @GetMapping
+    @GetMapping("videos")
     public ResponseEntity<List<VideoDto>> getAllVideos() {
         List<VideoDto> videos = videoService.getAllVideos();
         return new ResponseEntity<>(videos, HttpStatus.OK);
@@ -77,6 +81,37 @@ public class VideoController {
         StreamUtils.copy(resource,response.getOutputStream());
 
     }
+    @PostMapping("/videos")
+    public ResponseEntity<VideoDto> createVideo(@RequestParam("video") MultipartFile video,
+                                                @ModelAttribute VideoDto videoDetails) {
+        try {
+            if (!video.isEmpty()) {
+                // Upload the video file and get the file details
+                FileModel fileModel = fileService.uploadVideo(path, video);
+                String videoUrl = "http://localhost:" + port + "/api/v1/video/" + fileModel.getVideoFileName();
+
+                // Set the video URL in the DTO
+                videoDetails.setUrlVideo(videoUrl);
+
+                // You may want to add logic to delete the old video file if needed
+                // fileService.deleteOldVideo(videoDetails.getOldVideoPath());
+            } else {
+                // Handle case where no video file is provided
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            }
+
+            // Create the video with video details
+            VideoDto createdVideo = videoService.createVideo(videoDetails);
+
+            // Return the created video DTO along with the HTTP status
+            return new ResponseEntity<>(createdVideo, HttpStatus.CREATED);
+        } catch (IOException e) {
+            // Handle file processing error
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+
 
 
 }

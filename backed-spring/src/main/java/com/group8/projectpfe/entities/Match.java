@@ -25,7 +25,7 @@ public class Match {
     private int scoreTeamA;
     private int scoreTeamB;
     private boolean isPrivate;
-
+    private int countParticipant;
     @OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinColumn(name = "match_id")
     private List<Team> teams;

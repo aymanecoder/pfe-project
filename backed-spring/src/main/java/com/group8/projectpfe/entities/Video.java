@@ -1,9 +1,6 @@
 package com.group8.projectpfe.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -19,9 +16,11 @@ public class Video {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
     private String titre;
-    private String description;
-    private String tags;
     private String videoName;
+    @Column(length = 500)
+    private String urlVideo;
+    private String description;
+    private int numberOfTeam;
     private String addedDate;
 
 }
