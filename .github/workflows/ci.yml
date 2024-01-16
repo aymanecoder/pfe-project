@@ -116,28 +116,5 @@ jobs:
           tags: ${{ secrets.DOCKER_HUB_USERNAME }}/project-pfe:latest
 
 
-  Merge_to_prod:
-    needs: Docker
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Create Pull Request
-        id: create_pr
-        uses: peter-evans/create-pull-request@v3
-        with:
-          token: ${{ secrets.access_key }}
-          branch: "prod"
-          title: "Merge to prod"
-          commit-message: "Merge changes to prod"
-          body: |
-            This pull request automatically merges changes to the prod branch.
-
-      - name: Merge Pull Request
-        uses: peter-evans/merge-pull-request-action@v2
-        with:
-          token: ${{ secrets.access_key }}
-          pull-request-number: ${{ steps.create_pr.outputs.pull-request-number }}
-          merge-method: "squash"
-
 
 #  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
