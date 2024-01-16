@@ -117,7 +117,7 @@ jobs:
 
   merge-to-prod:
     runs-on: ubuntu-latest
-    needs: [sonarqube, Docker]
+    needs: [ sonarqube, Docker ]
 
     steps:
       - name: Checkout Repository
@@ -128,5 +128,11 @@ jobs:
 
       - name: Merge changes into prod
         run: |
-          git merge --no-ff ${{ github.sha }}
+          git merge --no-ff bae61cc6ba45c57df0fb905db94586452ff91a1f
           git push origin prod
+        env:
+          GITHUB_TOKEN: ${{ secrets.TOKEN }}
+
+
+
+#  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
