@@ -164,20 +164,4 @@
 
 		</profile>
 	</profiles>
-
-	<!-- Build configuration -->
-	<build>
-		<plugins>
-			<!-- SonarQube plugin configuration -->
-			<plugin>
-				<groupId>org.sonarsource.scanner.maven</groupId>
-				<artifactId>sonar-maven-plugin</artifactId>
-				<version>3.10.0.2594</version>
-				<configuration>
-					<sonar.host.url>http://localhost:9002</sonar.host.url>
-					<!-- Other SonarQube plugin configurations -->
-				</configuration>
-			</plugin>
-		</plugins>
-	</build>
 </project>
