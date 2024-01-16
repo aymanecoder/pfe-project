@@ -123,8 +123,10 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v3
 
+      - name: Create or checkout prod branch
+        run: git checkout -B prod
+
       - name: Merge changes into prod
         run: |
-          git checkout prod
           git merge --no-ff ${{ github.sha }}
           git push origin prod
