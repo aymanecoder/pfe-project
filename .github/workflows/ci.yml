@@ -115,6 +115,7 @@ jobs:
           push: true
           tags: ${{ secrets.DOCKER_HUB_USERNAME }}/project-pfe:latest
 
+
   Merge_to_prod:
     needs: Docker
     runs-on: ubuntu-latest
@@ -124,7 +125,7 @@ jobs:
         id: create_pr
         uses: peter-evans/create-pull-request@v3
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.TOKEN }}
           branch: "prod"
           title: "Merge to prod"
           commit-message: "Merge changes to prod"
@@ -137,7 +138,6 @@ jobs:
           token: ${{ secrets.TOKEN }}
           pull-request-number: ${{ steps.create_pr.outputs.pull-request-number }}
           merge-method: "squash"
-
 
 
 #  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
