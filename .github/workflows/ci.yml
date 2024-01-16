@@ -15,12 +15,25 @@ jobs:
         uses: actions/setup-java@v3
         with:
           java-version: '17'
-          distribution: 'corretto'
+          distribution: 'temurin'
           cache: maven
-      - name: Units Test
-        run: mvn -B test --file ./backed-spring/pom.xml
 
       - name: Build with Maven
-        run: |
-          mvn -B clean package  --file ./backed-spring/pom.xml
+        run: mvn -B clean package -DskipTests -f ./backed-spring/pom.xml
 
+  test:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: maven
+
+      - name: Run Backend tests
+        run: mvn -B test -PskipITs -f ./backed-spring/pom.xml
