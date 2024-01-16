@@ -125,7 +125,7 @@ jobs:
         id: create_pr
         uses: peter-evans/create-pull-request@v3
         with:
-          token: ${{ secrets.TOKEN }}
+          token: ${{ secrets.access_key }}
           branch: "prod"
           title: "Merge to prod"
           commit-message: "Merge changes to prod"
@@ -135,7 +135,7 @@ jobs:
       - name: Merge Pull Request
         uses: peter-evans/merge-pull-request-action@v2
         with:
-          token: ${{ secrets.TOKEN }}
+          token: ${{ secrets.access_key }}
           pull-request-number: ${{ steps.create_pr.outputs.pull-request-number }}
           merge-method: "squash"
 
