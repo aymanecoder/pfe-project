@@ -89,7 +89,7 @@ jobs:
           distribution: 'temurin'
           cache: maven
       - name: Build with Maven
-        run: mvn -B clean package -DskipTests -f ./backend-spring/pom.xml
+        run: mvn -B clean package -DskipTests
 
       - name: Build Docker Image
         uses: docker/build-push-action@v2
