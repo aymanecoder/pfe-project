@@ -115,29 +115,28 @@ jobs:
           push: true
           tags: ${{ secrets.DOCKER_HUB_USERNAME }}/project-pfe:latest
 
-  merge-to-prod:
+  Merge_to_prod:
+    needs: Docker
     runs-on: ubuntu-latest
-    needs: [ sonarqube, Docker ]
 
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v3
-
-      - name: Create or checkout prod branch
-        run: git checkout -B prod
-
-      - name: Merge changes into prod
-        run: |
-          git merge --no-ff bae61cc6ba45c57df0fb905db94586452ff91a1f
-          git push origin prod
-
       - name: Create Pull Request
+        id: create_pr
         uses: peter-evans/create-pull-request@v3
         with:
-          token: ${{ secrets.TOKEN }}
-          branch: prod
-          title: Merge to prod
-          body: Automatic pull request created for merging to prod
+          token: ${{ secrets.GITHUB_TOKEN }}
+          branch: "prod"
+          title: "Merge to prod"
+          commit-message: "Merge changes to prod"
+          body: |
+            This pull request automatically merges changes to the prod branch.
+
+      - name: Merge Pull Request
+        uses: peter-evans/merge-pull-request-action@v2
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          pull-request-number: ${{ steps.create_pr.outputs.pull-request-number }}
+          merge-method: "squash"
 
 
 
