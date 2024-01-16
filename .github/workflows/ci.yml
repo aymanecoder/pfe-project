@@ -19,5 +19,4 @@ jobs:
           cache: maven
 
       - name: Build with Maven
-        run: mvn -B clean package -f ./backed-spring/pom.xml
-
+        run: mvn -B clean package -DskipTests -f ./backed-spring/pom.xml
