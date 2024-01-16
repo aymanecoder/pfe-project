@@ -134,7 +134,7 @@ jobs:
       - name: Merge Pull Request
         uses: peter-evans/merge-pull-request-action@v2
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.TOKEN }}
           pull-request-number: ${{ steps.create_pr.outputs.pull-request-number }}
           merge-method: "squash"
 
