@@ -1,0 +1,7 @@
+target/
+src/main/resources/spring-app-35f65-firebase-adminsdk-rqn35-4c88445035.json
+#src/main/resources/uploads/*
+#/project-pfe/src/*
+#././backend-spring/videos/
+../videos
+../src

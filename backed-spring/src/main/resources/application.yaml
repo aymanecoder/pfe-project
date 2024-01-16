@@ -1,0 +1,37 @@
+server:
+  port: 8080
+  tomcat:
+    max-swallow-size: 100MB
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/db-healthily
+    username: aymane
+    password: root
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+image:
+  upload:
+    directory: uploads/
+
+  servlet:
+    multipart:
+      file-size-threshold: 2KB
+      max-file-size: 200MB
+      max-request-size: 215MB
+      enabled: true
+
+
+project:
+  video: videos/
+
+aws:
+  accessKey: AKIA52DLIESZDBGBITIN
+  secretKey: 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
+  region: us-east-1
+  s3:
+    bucket: s3-bucket-mini-pfe
