@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: postgres-config
+data:
+  application.properties: |
+    datasource.url=jdbc:postgresql://localhost:5432/db-healthily
+    datasource.username=aymane
+    datasource.password=root
+    datasource.driver-class-name=org.postgresql.Driver

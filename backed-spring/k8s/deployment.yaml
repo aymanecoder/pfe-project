@@ -1,23 +1,22 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: Title
-  labels:
-    app: Title
+  name: my-app
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
-      app: Title
+      app: my-app
   template:
     metadata:
-      name: Title
       labels:
-        app: Title
+        app: my-app
     spec:
       containers:
-        - name: Title
-          image: Image
-          imagePullPolicy: IfNotPresent
-      restartPolicy: Always
-      
+        - name: my-app
+          image: aymane2001/project-pfe:latest
+          envFrom:
+            - configMapRef:
+                name: postgres-config  # Name of the ConfigMap or Secret
+          ports:
+            - containerPort: 80
